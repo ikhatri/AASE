@@ -1,6 +1,3 @@
-# ignore sample data
-sample-data/*
-
 # vscode settings
 .vscode/*
 
