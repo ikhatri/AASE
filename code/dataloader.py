@@ -13,6 +13,9 @@ from pathlib import Path
 from collections import defaultdict
 from typing import Any, Dict, List, Optional
 from matplotlib import pyplot as plt
+from matplotlib.patches import Polygon
+from matplotlib.collections import PatchCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mayavi import mlab
 from argoverse.data_loading.argoverse_tracking_loader import ArgoverseTrackingLoader
 from argoverse.map_representation.map_api import ArgoverseMap
@@ -70,13 +73,11 @@ def get_trajectories(argoverse_data: ArgoverseTrackingLoader, end: int) -> dict:
 
             traj_by_id[obj.track_id].append([x, y])
 
-    # for track_id in traj_by_id.keys():
-    #     traj = np.array(traj_by_id[track_id])
     return traj_by_id
 
 def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end: int) -> dict:
     """
-    For every timestep, we grab the set of cars currently in/around an intersection.
+    For every timestep, we grab the set of cars currently in/around an intersection only in front of the AV
     """
     unique_id_list = set()
     for i in range(len(argoverse_data.label_list)):
@@ -90,6 +91,8 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
         visible_track_id.add(obj.track_id)
     current_pose = argoverse_data.get_pose(end)
     traj_by_id: Dict[Optional[str], List[Any]] = defaultdict(list)
+
+    lanes_with_traffic = []
 
     for i in range(0, end, 1):
         if current_pose is None:
@@ -117,7 +120,10 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
             intersecting_lane_ids = city_map.get_lane_segments_containing_xy(x, y, 'PIT')
             traffic_control = False
             for lane_id in intersecting_lane_ids:
-                traffic_control = traffic_control or city_map.lane_has_traffic_control_measure(lane_id, 'PIT')
+                if city_map.lane_has_traffic_control_measure(lane_id, 'PIT'):
+                    traffic_control = True
+                    lanes_with_traffic.append(lane_id)
+
             if not traffic_control:
                 continue
 
@@ -133,15 +139,13 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
 
             traj_by_id[obj.track_id].append([x, y, i])
 
-    # for track_id in traj_by_id.keys():
-    #     traj = np.array(traj_by_id[track_id])
-    return traj_by_id
+    return traj_by_id, lanes_with_traffic
 
 if __name__ == "__main__":
     end_time = 120
     d = load_all_logs(GLARE_DIR)
     mappymap = ArgoverseMap()
-    tjs = get_relevant_trajectories(mappymap, d, end_time)
+    tjs, lanes = get_relevant_trajectories(mappymap, d, end_time)
     print(len(tjs))
     for t in tjs:
         print(len(tjs[t]))
@@ -174,12 +178,23 @@ if __name__ == "__main__":
     ax3.plot3D(np.arange(15),np.zeros(15),np.zeros(15), 'b+')
     ax3.plot3D(np.zeros(15),np.arange(15),np.zeros(15), 'r+')
 
-    for t in tjs:
-        traj = np.array(tjs[t])
-        if len(traj) == 2:
-            ax3.plot3D(traj[:,0], traj[:,1], np.zeros((traj.shape[0])), 'c*')
-        else:
-            ax3.plot3D(traj[:,0], traj[:,1], np.zeros((traj.shape[0])), 'm*')
+    polys = []
+    for l in lanes:
+        polys.append(mappymap.get_lane_segment_polygon(l, 'PIT'))
+
+    # col = PatchCollection(polys, alpha=0.5)
+    # ax3.add_collection(col)
+    ax3.add_collection3d(Poly3DCollection(polys))
+
+    # for t in tjs:
+    #     traj = np.array(tjs[t])
+    #     if len(traj) == 2:
+    #         ax3.plot3D(traj[:,0], traj[:,1], np.zeros((traj.shape[0])), 'c*')
+    #     elif len(traj) == 33:
+    #         ax3.plot3D(traj[:,0], traj[:,1], np.zeros((traj.shape[0])), 'm*')
+    #     else:
+    #         ax3.plot3D(traj[:,0], traj[:,1], np.zeros((traj.shape[0])), 'g*')
+
 
     plt.axis('off')
     plt.show()
