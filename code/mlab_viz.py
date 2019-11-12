@@ -12,8 +12,6 @@ import logging
 from dataloader import load_all_logs, get_relevant_trajectories
 from argoverse.map_representation.map_api import ArgoverseMap
 
-# Ignoring the imports let's make a function to do all the data wrangling below
-
 SAMPLE_DIR = Path('sample-data/')
 GLARE_DIR = Path('/home/ikhatri/argoverse/argoverse-api/argoverse-tracking/glare_example/')
 logger = logging.getLogger(__name__)
