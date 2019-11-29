@@ -1,0 +1,4 @@
+states,zlp,zsp,zrp,zlz,zsz,zrz,zlm,zsm,zrm,llp,lsp,lrp,llz,lsz,lrz,llm,lsm,lrm,mlp,msp,mrp,mlz,msz,mrz,mlm,msm,mrm 
+zero,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
+low,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1
+med,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0

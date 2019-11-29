@@ -6,19 +6,70 @@ import pandas as pd
 import numpy as np
 from pgmpy.models import DynamicBayesianNetwork as DBN
 from pgmpy.factors.discrete import TabularCPD as cpd
+from pgmpy.factors.discrete import TabularCPD
 
 def setup_model(filepath):
-    pd_file = pd.read_csv(filepath)
 
-    weights = pd_file.to_numpy()
+    labeled_dataframe= pd.read_csv(filepath)
+    labeled_dataframe.set_index('states', inplace=True)
+    model_weights = labeled_dataframe.to_numpy()
+    return model_weights
+    
+def setup_traffic_DBN(filepath):
+    #TODO try different light parameters
+    light_model = setup_model(filepath+'light_model.csv')
+    print("Traffic Light transition weights: ")
+    print(light_model)
+    #TODO find some way to mock up driver parameters
+    driver_model = setup_model(filepath+'driver_model.csv')
+    print("Driver transition weights: ")
+    print(driver_model)
+    #TODO make the velocity parameters less binary
+    velocity_model = setup_model(filepath+'velocity_model.csv')
+    print("Velocity transition weights: ")
+    print(velocity_model)
+    #TODO find some way to mock up position parameters
+    position_model = setup_model(filepath+'position_model.csv')
+    print("Position transition weights: ")
+    print(position_model)
     dbn = DBN()
-    dbn.add_edges_from([(('A', 0), ('A', 1))])
-    test_CPD = cpd(('A', 1), 2, weights, evidence = [('A', 0)],
-    evidence_card = [2])
-    print(test_CPD)
-    dbn.add_cpds(test_CPD)
-    return dbn
+    dbn.add_edges_from([(('Traffic Light', 0), ('Traffic Light', 1)),
+                        (('Traffic Light', 0), ('Driver', 0)),
+                        (('Velocity', 0),      ('Driver', 0)),
+                        (('Position', 0),      ('Driver', 0)),
+                        (('Velocity', 0),      ('Velocity', 1)),
+                        (('Driver', 0),        ('Velocity', 1)),
+                        (('Driver', 0),        ('Position', 1)),
+                        (('Position', 0),      ('Position', 1)),
+                        (('Velocity', 1),      ('Position', 1))])
+    #with 3 possible lights (red, green, yellow), and 3 possible lights to transition, we have 9 params
+    light_CPD = cpd(('Traffic Light', 1), 3, light_model, 
+                    evidence = [('Traffic Light', 0)],
+                    evidence_card = [3])
+    # with 9 possible driver actions (left,straight,right * +,-,0 accel), we have 9*3*4*3 params (although many will be 0). 
+    # we know the driver isn't deterministic, because he may be turning right/left or going straight
+    driver_CPD = cpd(('Driver', 0), 9, driver_model, 
+                    evidence = [('Traffic Light', 0), ('Position', 0), ('Velocity', 0)],
+                    evidence_card = [3, 4, 3])
+    # With three possible velocities (zero, low, med), we have 3*3*9 = 54 params.
+    # However, this is deterministic, so we only have 3*9 27 nonzero
+    velocity_CPD = cpd(('Velocity', 1), 3, velocity_model,
+                    evidence = [('Velocity', 0), ('Driver', 0)],
+                    evidence_card = [3, 9])
+    # with four possible positions (at light, in light straight, in light left, or in light right) we have 4*9*4*3 = 288 params. 
+    # However, this also is deterministic, so we only have 9*4*3 = 72 params.
+    position_CPD = cpd(('Position', 1), 4, position_model,
+                    evidence = [('Driver', 0), ('Position', 0), ('Velocity', 1)],
+                    evidence_card = [9, 4, 3]
+    )
+    print(light_CPD)
+    # print(driver_CPD)
+    # print(velocity_CPD)
+    # print(position_CPD)
 
+    dbn.add_cpds(light_CPD, driver_CPD, velocity_CPD, position_CPD)
+    return dbn
 if __name__ == "__main__":
-    dbn = setup_model(r'/Users/sparr/projects/AASE/params/dbn_example.csv')
-    print(dbn.get_cpds())
+    dbn = setup_traffic_DBN(r'/Users/sparr/projects/AASE/params/')
+    print(dbn.cpds)
+    print(dbn.check_model())
