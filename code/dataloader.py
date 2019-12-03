@@ -161,11 +161,11 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
                     p = i-1
                     while p not in data_dict[obj.track_id] and p >= 0:
                         p-=1
-                    data_dict[obj.track_id][i]['discrete_pos'] = data_dict[obj.track_id][p]['discrete_pos']
+                    data_dict[obj.track_id][i]['lane_id'] = data_dict[obj.track_id][p]['lane_id']
                 else:
-                    data_dict[obj.track_id][i]['discrete_pos'] = intersecting_lane_ids[oracle_segment]
+                    data_dict[obj.track_id][i]['lane_id'] = intersecting_lane_ids[oracle_segment]
             else:
-                data_dict[obj.track_id][i]['discrete_pos'] = intersecting_lane_ids[oracle_segment]
+                data_dict[obj.track_id][i]['lane_id'] = intersecting_lane_ids[oracle_segment]
 
 
             # re-transform the object coords of the object to be with respect to the vehicle at the final timestep which we are plotting
@@ -176,7 +176,7 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
 
     return data_dict
 
-def visualize(argo_data: ArgoverseTrackingLoader, argo_maps: ArgoverseMap, end_time: int, plot_trajectories: bool=True, plot_lidar: bool=True, plot_bbox: bool=True, plot_segments: bool=True, show: bool=True) -> None:
+def visualize(argo_maps: ArgoverseMap, argo_data: ArgoverseTrackingLoader, end_time: int, plot_trajectories: bool=True, plot_lidar: bool=True, plot_bbox: bool=True, plot_segments: bool=True, show: bool=True) -> None:
     """
     A function to vizualize everything in GPU accelerated 3D
 
@@ -208,7 +208,7 @@ def visualize(argo_data: ArgoverseTrackingLoader, argo_maps: ArgoverseMap, end_t
         segments = set()
         for o in data:
             for t in data[o]:
-                segments.add(data[o][t]['discrete_pos'])
+                segments.add(data[o][t]['lane_id'])
         for l in segments:
             poly = mappymap.get_lane_segment_polygon(l, argo_data.city_name)
             poly = city_to_egovehicle_se3.inverse_transform_point_cloud(poly)
@@ -231,7 +231,7 @@ def compute_velocity(data_dict: dict, end_time: int) -> dict:
         data_dict[obj][observed_steps[0]]['velocity'] = data_dict[obj][observed_steps[1]]['velocity']
     return data_dict
 
-def discretize(data_dict: dict) -> dict:
+def discretize(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, data_dict: dict) -> dict:
     """
     A function to discretize the data into position segments and the following three velocity classes:
         0: zero (0 < v < 0.1)
@@ -253,13 +253,42 @@ def discretize(data_dict: dict) -> dict:
             else:
                 dv = 2
             data_dict[o][t]['discrete_vel'] = dv
-        return data_dict
+            lane_id = data_dict[o][t]['lane_id']
+            if not city_map.lane_has_traffic_control_measure(lane_id, argoverse_data.city_name):
+                data_dict[o][t]['discrete_pos'] = 0
+                continue
+            direction = city_map.get_lane_turn_direction(lane_id, argoverse_data.city_name)
+            if direction == 'LEFT':
+                data_dict[o][t]['discrete_pos']  = 1
+            if direction == 'NONE':
+                data_dict[o][t]['discrete_pos']  = 2
+            if direction == 'RIGHT':
+                data_dict[o][t]['discrete_pos']  = 3
+    return data_dict
+def build_evidence(obj_id: int, data_dict: dict) -> dict:
+    evidence_dict = {}
+    for t in data_dict[obj_id]:
+        evidence_dict[('position', t)] = data_dict[obj_id][t]['discrete_pos']
+        evidence_dict[('velocity', t)] = data_dict[obj_id][t]['discrete_vel']
+    return evidence_dict
+
+def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end_time: int):
+    data = get_relevant_trajectories(city_map, argoverse_data, end_time)
+    data = compute_velocity(data, end_time)
+    data = discretize(city_map, argoverse_data, data)
+    evidence_dict = {}
+    for o in data:
+        evidence_dict[o] = build_evidence(o, data)
+    return evidence_dict
 
 if __name__ == "__main__":
     end_time = 150
     d = load_all_logs(GLARE_DIR)
     mappymap = ArgoverseMap()
-    visualize(d, mappymap, end_time)
-    # data = get_relevant_trajectories(mappymap, d, end_time)
-    # data = compute_velocity(data, end_time)
-    # data = discretize(data)
+    visualize(mappymap, d, end_time)
+    # evidence_dict = get_evidence(mappymap, d, end_time)
+    # for o in evidence_dict:
+    #     for t in evidence_dict[o]:
+    #         print(o,t,evidence_dict[o][t])
+    #         print(o,t,evidence_dict[o][t])
+
