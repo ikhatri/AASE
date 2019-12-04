@@ -161,7 +161,10 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
                     p = i-1
                     while p not in data_dict[obj.track_id] and p >= 0:
                         p-=1
-                    data_dict[obj.track_id][i]['lane_id'] = data_dict[obj.track_id][p]['lane_id']
+                    if p > 0:
+                        data_dict[obj.track_id][i]['lane_id'] = data_dict[obj.track_id][p]['lane_id']
+                    else:
+                        data_dict[obj.track_id][i]['lane_id'] = intersecting_lane_ids[oracle_segment]
                 else:
                     data_dict[obj.track_id][i]['lane_id'] = intersecting_lane_ids[oracle_segment]
             else:
@@ -282,8 +285,8 @@ def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader
     return evidence_dict
 
 if __name__ == "__main__":
-    end_time = 150
-    d = load_all_logs(GLARE_DIR)
+    end_time = 60
+    d = load_all_logs(SAMPLE_DIR)
     mappymap = ArgoverseMap()
     visualize(mappymap, d, end_time)
     # evidence_dict = get_evidence(mappymap, d, end_time)
