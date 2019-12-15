@@ -24,6 +24,24 @@ def setup_test_DBN():
                         (('G', 0), ('L', 0)), (('D', 0), ('D', 1)),
                         (('I', 0), ('I', 1)), (('G', 0), ('G', 1)),
                         (('G', 0), ('L', 1)), (('L', 0), ('L', 1))])
+    grade_cpd = cpd(('G', 0), 3, [[0.3, 0.05, 0.9, 0.5],
+                                  [0.4, 0.25, 0.08, 0.3],
+                                  [0.3, 0.7, 0.02, 0.2]],
+                           evidence=[('I', 0),('D', 0)],
+                           evidence_card=[2, 2])
+    d_i_cpd = cpd(('D', 1), 2, [[0.6, 0.3],
+                                [0.4, 0.7]],
+                            evidence=[('D', 0)],
+                            evidence_card=[2])
+    diff_cpd = cpd(('D', 0), 2, [[0.6, 0.4]])
+    intel_cpd = cpd(('I',0), 2, [[0.7, 0.3]])
+
+    i_i_cpd = cpd(('I', 1), 2, [[0.5, 0.4],
+                                [0.5, 0.6]],
+                        evidence=[('I', 0)],
+                        evidence_card=[2])
+    dbn.add_cpds(grade_cpd, d_i_cpd, diff_cpd, intel_cpd, i_i_cpd)
+    dbn.initialize_initial_state()
     return dbn
 def setup_traffic_DBN(filepath: Path):
     """
@@ -53,7 +71,7 @@ def setup_traffic_DBN(filepath: Path):
                         (('Driver', 0),        ('Velocity', 1)),
                         (('Driver', 0),        ('Position', 1)),
                         (('Position', 0),      ('Position', 1)),
-                        (('Velocity', 1),      ('Position', 1))])
+                        (('Velocity', 0),      ('Position', 0))])
     #with 3 possible lights (red, green, yellow), and 3 possible lights to transition, we have 9 params
     light_CPD = cpd(('Traffic Light', 1), 3, light_model,
                     evidence = [('Traffic Light', 0)],
@@ -77,12 +95,12 @@ def setup_traffic_DBN(filepath: Path):
                     evidence = [('Driver', 0), ('Position', 0), ('Velocity', 1)],
                     evidence_card = [9, 4, 3])
 
-    # position_prior = cpd(('Position', 0), 4, [[.25,.25,.25],
-    #                                           [.25,.25,.25],
-    #                                           [.25,.25,.25],
-    #                                           [.25,.25,.25]],
-    #                 evidence = [('Velocity', 0)],
-    #                 evidence_card = [3])
+    position_prior = cpd(('Position', 0), 4, [[.25,.25,.25],
+                                              [.25,.25,.25],
+                                              [.25,.25,.25],
+                                              [.25,.25,.25]],
+                    evidence = [('Velocity', 0)],
+                    evidence_card = [3])
 
     # position_prior = cpd(('Position', 0), 4, [[.25,.25,.25,.25]]) 
     # print(light_CPD.values.shape)
@@ -94,12 +112,12 @@ def setup_traffic_DBN(filepath: Path):
     # print(velocity_CPD)
     # print(position_CPD)
 
-    dbn.add_cpds(light_prior, light_CPD, driver_CPD, velocity_prior, velocity_CPD, position_CPD)
-    print(dbn.get_inter_edges())
-    # for edge in dbn.get_inter_edges():
-    #     print(edge[0][0])
-    print(dbn.get_interface_nodes(time_slice = 0))
-    print(dbn.get_interface_nodes(time_slice = 1))
+    dbn.add_cpds(light_prior, light_CPD, driver_CPD, velocity_prior, velocity_CPD, position_prior, position_CPD)
+    # print(dbn.get_inter_edges())
+    # # for edge in dbn.get_inter_edges():
+    # #     print(edge[0][0])
+    # print(dbn.get_interface_nodes(time_slice = 0))
+    # print(dbn.get_interface_nodes(time_slice = 1))
 
     return dbn
 
@@ -109,7 +127,7 @@ def get_inference_model(model: DBN):
     #     print(c.variable)
     #     print(c.values.shape)
     #     print(c.variables)
-    print(model.get_cpds(time_slice=1))
+    # print(model.get_cpds(time_slice=1))
     return VariableElimination(model)
 
 if __name__ == "__main__":
