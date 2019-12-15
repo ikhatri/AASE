@@ -1,1 +1,2 @@
 sample-data/c6911883-1843-3727-8eaa-41dc8cda8993 filter=lfs diff=lfs merge=lfs -text
+glare_example/64c12551-adb9-36e3-a0c1-e43a0e9f3845 filter=lfs diff=lfs merge=lfs -text

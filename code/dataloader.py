@@ -17,7 +17,7 @@ from argoverse.utils.geometry import rotate_polygon_about_pt
 from argoverse.utils.centerline_utils import get_oracle_from_candidate_centerlines
 
 SAMPLE_DIR = Path('sample-data/')
-GLARE_DIR = Path('/home/ikhatri/argoverse/argoverse-api/argoverse-tracking/glare_example/')
+GLARE_DIR = Path('glare_example/')
 logger = logging.getLogger(__name__)
 
 def load_all_logs(data_dir: Path) -> ArgoverseTrackingLoader:
@@ -231,7 +231,10 @@ def compute_velocity(data_dict: dict, end_time: int) -> dict:
             p = observed_steps[i-1]
             distance = np.linalg.norm(data_dict[obj][t]['position'] - data_dict[obj][p]['position'])
             data_dict[obj][t]['velocity'] = distance / (t-p)
-        data_dict[obj][observed_steps[0]]['velocity'] = data_dict[obj][observed_steps[1]]['velocity']
+        if len(observed_steps) < 2:
+            data_dict[obj][observed_steps[0]]['velocity'] = 0
+        else:
+            data_dict[obj][observed_steps[0]]['velocity'] = data_dict[obj][observed_steps[1]]['velocity']
     return data_dict
 
 def discretize(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, data_dict: dict) -> dict:
@@ -285,13 +288,13 @@ def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader
     return evidence_dict
 
 if __name__ == "__main__":
-    end_time = 60
-    d = load_all_logs(SAMPLE_DIR)
+    end_time = 150
+    d = load_all_logs(GLARE_DIR)
     mappymap = ArgoverseMap()
-    visualize(mappymap, d, end_time)
-    # evidence_dict = get_evidence(mappymap, d, end_time)
-    # for o in evidence_dict:
-    #     for t in evidence_dict[o]:
-    #         print(o,t,evidence_dict[o][t])
-    #         print(o,t,evidence_dict[o][t])
+    # visualize(mappymap, d, end_time)
+    evidence_dict = get_evidence(mappymap, d, end_time)
+    for o in evidence_dict:
+        for t in evidence_dict[o]:
+            print(o,t,evidence_dict[o][t])
+            print(o,t,evidence_dict[o][t])
 
