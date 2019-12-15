@@ -1,4 +1,4 @@
 states,red,green,yellow
 red,.95,0,.3
-green,.05," .95",0
+green,.05,.95,0
 yellow,0,.05,.7
