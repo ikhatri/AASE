@@ -5,23 +5,27 @@
 
 from pathlib import Path
 import logging
-from dataloader import load_all_logs, get_evidence
+from dataloader import load_all_logs, get_evidence, get_discretized_evidence_for_object, visualize
 from argoverse.map_representation.map_api import ArgoverseMap
 from model import setup_traffic_DBN
 from model import get_inference_model
 SAMPLE_DIR = Path('sample-data/')
-GLARE_DIR = Path('/home/ikhatri/argoverse/argoverse-api/argoverse-tracking/glare_example/')
+GLARE_DIR = Path('glare_example/')
 logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     end_time = 150
+    interval = 10
     argo_data = load_all_logs(GLARE_DIR)
     city_map = ArgoverseMap()
-    # visualize(mappymap, d, end_time)
+    # visualize(city_map, argo_data, end_time)
     evidence_dict = get_evidence(city_map, argo_data, end_time)
+    for i, o in enumerate(evidence_dict):
+      for t in evidence_dict[o]:
+        print("id", i, t, evidence_dict[o][t])
+    discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, obj_id = 2)
     dbn = setup_traffic_DBN(Path('params'))
     model = get_inference_model(dbn)
-
-    for i, o in enumerate(evidence_dict):
-      if i == 0:
-        print(model.backward_inference(variables = [('Traffic Light',10),('Traffic Light',60),('Traffic Light',120)], evidence = evidence_dict[o]))
-        break
+    variables = [('Traffic Light', x) for x in range(1, 110)]
+    results =  model.query(variables = variables, evidence = discr_evidence_dict)
+    for d in results:
+      print(d, results[d])

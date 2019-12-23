@@ -30,7 +30,8 @@ def setup_traffic_DBN(filepath: Path):
     # print(light_CPD)
     dbn.add_cpds(light_CPD)
     return dbn
-
+def setup_inference_example_DBN():
+    pass
 def get_inference_model(model: DBN):
     print("preNodes", str(model.nodes(data = True)))
     model.initialize_initial_state()

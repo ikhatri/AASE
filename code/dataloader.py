@@ -191,7 +191,7 @@ def visualize(argo_maps: ArgoverseMap, argo_data: ArgoverseTrackingLoader, end_t
     mlab.figure(bgcolor=(0.2, 0.2, 0.2))
     city_to_egovehicle_se3 = argo_data.get_pose(end_time)
     if plot_trajectories or plot_segments:
-        data = get_relevant_trajectories(mappymap, d, end_time)
+        data = get_relevant_trajectories(argo_maps, argo_data, end_time)
     if plot_lidar:
         pc = argo_data.get_lidar(end_time)
         pc = rotate_polygon_about_pt(pc, city_to_egovehicle_se3.rotation, np.zeros(3))
@@ -213,7 +213,7 @@ def visualize(argo_maps: ArgoverseMap, argo_data: ArgoverseTrackingLoader, end_t
             for t in data[o]:
                 segments.add(data[o][t]['lane_id'])
         for l in segments:
-            poly = mappymap.get_lane_segment_polygon(l, argo_data.city_name)
+            poly = argo_maps.get_lane_segment_polygon(l, argo_data.city_name)
             poly = city_to_egovehicle_se3.inverse_transform_point_cloud(poly)
             poly = rotate_polygon_about_pt(poly, city_to_egovehicle_se3.rotation, np.zeros(3))
             mlab.plot3d(poly[:, 0], poly[:, 1], np.zeros(poly.shape[0]), color=(1, 1, 0), tube_radius=None)
@@ -274,8 +274,8 @@ def discretize(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, 
 def build_evidence(obj_id: int, data_dict: dict) -> dict:
     evidence_dict = {}
     for t in data_dict[obj_id]:
-        evidence_dict[('position', t)] = data_dict[obj_id][t]['discrete_pos']
-        evidence_dict[('velocity', t)] = data_dict[obj_id][t]['discrete_vel']
+        evidence_dict[('Position', t)] = data_dict[obj_id][t]['discrete_pos']
+        evidence_dict[('Velocity', t)] = data_dict[obj_id][t]['discrete_vel']
     return evidence_dict
 
 def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end_time: int):
@@ -286,15 +286,23 @@ def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader
     for o in data:
         evidence_dict[o] = build_evidence(o, data)
     return evidence_dict
-
+def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_id: int):
+    discr_evidence_dict = {}
+    for i, o in enumerate(evidence_dict):
+        if i == obj_id:
+            for t in evidence_dict[o]:
+                discr_evidence_dict[(t[0],t[1]//interval)] = evidence_dict[o][t]
+    return discr_evidence_dict
 if __name__ == "__main__":
     end_time = 150
+    interval = 10
     d = load_all_logs(GLARE_DIR)
     mappymap = ArgoverseMap()
     # visualize(mappymap, d, end_time)
     evidence_dict = get_evidence(mappymap, d, end_time)
-    for o in evidence_dict:
-        for t in evidence_dict[o]:
-            print(o,t,evidence_dict[o][t])
-            print(o,t,evidence_dict[o][t])
+    discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, 10, 2)
+    for t in discr_evidence_dict:
+        print(t, discr_evidence_dict[t])
+    
+    
 
