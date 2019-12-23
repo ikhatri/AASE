@@ -25,7 +25,7 @@ if __name__ == "__main__":
     discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, obj_id = 2)
     dbn = setup_traffic_DBN(Path('params'))
     model = get_inference_model(dbn)
-    variables = [('Traffic Light', x) for x in range(1, 110)]
+    variables = [('Traffic Light', x) for x in range(1, 110//interval)]
     results =  model.query(variables = variables, evidence = discr_evidence_dict)
     for d in results:
       print(d, results[d])
