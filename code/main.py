@@ -14,7 +14,7 @@ GLARE_DIR = Path('glare_example/')
 logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     end_time = 150
-    interval = 10
+    interval = 5
     obj_id = 0
     argo_data = load_all_logs(GLARE_DIR)
     city_map = ArgoverseMap()

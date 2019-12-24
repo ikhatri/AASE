@@ -312,8 +312,8 @@ def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_
                 timestep = t[1]//interval
                 if up_to is not None and timestep >= up_to:
                     break
-                print(t, evidence_dict[o][t])
-                discr_evidence_dict[(t[0],timestep)] = evidence_dict[o][t]
+                print("("+t[0] + ", " + str(t[1]+interval)+")", evidence_dict[o][t])
+                discr_evidence_dict[(t[0],timestep+1)] = evidence_dict[o][t]
 
 
     return discr_evidence_dict
@@ -324,7 +324,7 @@ if __name__ == "__main__":
     mappymap = ArgoverseMap()
     # visualize(mappymap, d, end_time)
     evidence_dict = get_evidence(mappymap, d, end_time)
-    discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, 10, 2)
+    discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, 2)
     for t in discr_evidence_dict:
         print(t, discr_evidence_dict[t])
     
