@@ -301,8 +301,11 @@ def get_evidence_start_and_finish_for_object(evidence_dict: dict, interval: int,
                     first_visible_timestep = timestep
     return first_visible_timestep, last_visible_timestep
 
-def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_id: int, up_to: int = None):
-    discr_evidence_dict = {}
+def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_id: int, up_to: int = None, init_evidence_dict = None):
+    if not init_evidence_dict:
+        discr_evidence_dict = {}
+    else:
+        discr_evidence_dict = init_evidence_dict
     for i, o in enumerate(evidence_dict):
         if i == obj_id:
             print("evidence from id", i)
@@ -312,9 +315,8 @@ def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_
                 timestep = t[1]//interval
                 if up_to is not None and timestep >= up_to:
                     break
-                print("("+t[0] + ", " + str(t[1]+interval)+")", evidence_dict[o][t])
-                discr_evidence_dict[(t[0],timestep+1)] = evidence_dict[o][t]
-
+                print("("+t[0] + str(obj_id) + ", " + str(t[1]+interval)+")", evidence_dict[o][t])
+                discr_evidence_dict[(t[0]+"_Evidence_"+str(obj_id),timestep+1)] = evidence_dict[o][t]
 
     return discr_evidence_dict
 if __name__ == "__main__":
