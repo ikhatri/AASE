@@ -272,6 +272,7 @@ def discretize(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, 
             if direction == 'RIGHT':
                 data_dict[o][t]['discrete_pos']  = 3
     return data_dict
+
 def build_evidence(obj_id: int, data_dict: dict) -> dict:
     evidence_dict = {}
     for t in data_dict[obj_id]:
@@ -322,13 +323,14 @@ def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_
 if __name__ == "__main__":
     end_time = 150
     interval = 10
-    d = load_all_logs(GLARE_DIR)
+    d = load_all_logs(SAMPLE_DIR)
     mappymap = ArgoverseMap()
     # visualize(mappymap, d, end_time)
     evidence_dict = get_evidence(mappymap, d, end_time)
-    discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, 2)
-    for t in discr_evidence_dict:
-        print(t, discr_evidence_dict[t])
-    
-    
+    for i in range(len(evidence_dict)):
+        discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
+        for t in discr_evidence_dict:
+            print(t, discr_evidence_dict[t])
+
+
 
