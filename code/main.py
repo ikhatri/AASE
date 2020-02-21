@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     end_time = 150
     interval = 10
-    adj_obj_ids = [0,1]
+    adj_obj_ids = [0]
     cross_obj_ids = []
     argo_data = load_all_logs(GLARE_DIR)
     city_map = ArgoverseMap()

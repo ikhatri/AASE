@@ -13,7 +13,7 @@ def setup_model(filepath: Path, epsilon: float=0):
     """
     TODO: Documentation
     """
-    labeled_dataframe= pd.read_csv(filepath)
+    labeled_dataframe = pd.read_csv(filepath)
     labeled_dataframe.set_index('states', inplace=True)
     model_weights = labeled_dataframe.to_numpy(dtype = np.float)
     model_weights = (1-epsilon)*model_weights + np.full_like(model_weights, epsilon)
@@ -107,13 +107,13 @@ def setup_traffic_DBN(filepath: Path):
 
     dbn.add_cpds(light_prior, light_CPD, driver_CPD, velocity_prior, velocity_CPD, position_prior, position_CPD)
     return dbn
-def setup_car_cpds(filepath: Path, car_id, light):
 
+def setup_car_cpds(filepath: Path, car_id, light):
     driver_model = setup_model(filepath.joinpath('driver_model.csv'), epsilon = .01)
     velocity_model = setup_model(filepath.joinpath('velocity_model.csv'), epsilon = .03)
     position_model = setup_model(filepath.joinpath('position_model.csv'), epsilon = .01)
-    pos_evidence_model = setup_model(filepath.joinpath('evidence_pos.csv'), epsilon = .1)
-    vel_evidence_model = setup_model(filepath.joinpath('evidence_vel.csv'), epsilon = .1)
+    pos_evidence_model = setup_model(filepath.joinpath('evidence_pos.csv'), epsilon = .05)
+    vel_evidence_model = setup_model(filepath.joinpath('evidence_vel.csv'), epsilon = .05)
     s_car_id = str(car_id)
     driver = 'Driver_'+s_car_id
     velocity = 'Velocity_'+s_car_id
@@ -176,16 +176,16 @@ def setup_backbone_DBN(filepath: Path):
     system_model = setup_model(filepath.joinpath('system_model.csv'), epsilon = .01)
     our_model    = setup_model(filepath.joinpath('our_light_model.csv'),    epsilon = .005)
     cross_model  = setup_model(filepath.joinpath('cross_light_model.csv'),  epsilon = .005)
-
+    vision_model = setup_model(filepath.joinpath('vision_evidence.csv'), epsilon = .08)
     dbn = DBN()
     our_light = 'Our Light'
     cross_light = 'Cross Light'
-    # dbn.add_nodes_from(['Light System', our_light, cross_light])
-    dbn.add_nodes_from(['Light System', our_light])
+    dbn.add_nodes_from(['Light System', our_light, cross_light, 'Vision'])
 
     dbn.add_edges_from([(('Light System', 0), ('Light System', 1)),
-                        (('Light System', 0), (our_light, 0))])
-                        # (('Light System', 0), (cross_light, 0))])
+                        (('Light System', 0), (our_light, 0)),
+                        ((our_light, 0), ('Vision', 0)),
+                        (('Light System', 0), (cross_light, 0))])
     system_prior = cpd(('Light System', 0), 6, [[.16,.16,.16,.16,.16,.16]])
     system_prior.normalize()
     system_CPD = cpd(('Light System', 1), 6, system_model, 
@@ -200,8 +200,11 @@ def setup_backbone_DBN(filepath: Path):
                      evidence = [('Light System', 0)],
                      evidence_card = [6])
     cross_light_CPD.normalize()
-    # dbn.add_cpds(system_prior, system_CPD, our_light_CPD, cross_light_CPD)
-    dbn.add_cpds(system_prior, system_CPD, our_light_CPD)
+    vision_CPD = cpd(('Vision', 0), 3, vision_model,
+                     evidence = [(our_light, 0)],
+                     evidence_card = [3])
+    vision_CPD.normalize()
+    dbn.add_cpds(system_prior, system_CPD, our_light_CPD, cross_light_CPD, vision_CPD)
     return dbn, our_light, cross_light
 
 def add_cars_DBN(filepath: Path, backbone_dbn, our_light, cross_light, adj_car_ids, cross_car_ids):
@@ -212,15 +215,14 @@ def add_cars_DBN(filepath: Path, backbone_dbn, our_light, cross_light, adj_car_i
         backbone_dbn.add_edges_from(edges)
         backbone_dbn.add_cpds(*cpds)
 
-    # for cross_id in cross_car_ids:
-    #     nodes, edges, cpds  = setup_car_cpds(filepath, cross_id, cross_light)
-    #     backbone_dbn.add_nodes_from(nodes)
-    #     backbone_dbn.add_edges_from(edges)
-    #     backbone_dbn.add_cpds(*cpds)
+    for cross_id in cross_car_ids:
+        nodes, edges, cpds  = setup_car_cpds(filepath, cross_id, cross_light)
+        backbone_dbn.add_nodes_from(nodes)
+        backbone_dbn.add_edges_from(edges)
+        backbone_dbn.add_cpds(*cpds)
 
     return backbone_dbn
         
-
     
 def get_inference_model(model: DBN):
     model.initialize_initial_state()
