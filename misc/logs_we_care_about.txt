@@ -1,6 +1,28 @@
-train1/1d676737-4110-3f7e-bec0-0c90f74c248f # multiple greens, adj cars blow past
-train1/64c12551-adb9-36e3-a0c1-e43a0e9f3845 # light obscured by glare, cars in front
-train1/70d2aea5-dbeb-333d-b21e-76a7f2f1ba1c # light with stopped cars and Y shaped intersection
-train1/84c35ea7-1a99-3a0c-a3ea-c5915d68acbc # miami... it's a mess
-train1/53037376_5303_5303_5303_553038557184 # no traffic light, the glare will make the CNN fail though
-train1/b1ca08f1-24b0-3c39-ba4e-d5a92868462c # best one yet, lots of cross traffic that stops before light turns green
+train1/1d676737-4110-3f7e-bec0-0c90f74c248f * # multiple greens, adj cars blow past
+train1/64c12551-adb9-36e3-a0c1-e43a0e9f3845 * # light obscured by glare, cars in front
+train1/70d2aea5-dbeb-333d-b21e-76a7f2f1ba1c * # light with stopped cars and Y shaped intersection
+train1/84c35ea7-1a99-3a0c-a3ea-c5915d68acbc * # miami... it's a mess
+train1/53037376_5303_5303_5303_553038557184 * # no traffic light, the glare will make the CNN fail though
+train1/b1ca08f1-24b0-3c39-ba4e-d5a92868462c * # best one yet, lots of cross traffic that stops before light turns green
+train2/5c251c22-11b2-3278-835c-0cf3cdee3f44 # no traffic light, but cross traffic at a stop sign so we could apply it anyway?
+train2/10b3a1d8-e56c-38be-aaf7-ef2f862a5c4e # traffic light and through traffic
+train2/85bc130b-97ae-37fb-a129-4fc07c80cca7 # red to green transition with bus going across
+train2/577ea60d-7cc0-34a4-a8ff-0401e5ab9c62 * # green light but stopped traffic in miami
+train2/29789600_2979_2979_2979_429790834688 # red the whole time, cross traffic
+train2/88538208_8853_8853_8853_388539396096 * # red to green nighttime transition in pittsburgh
+train2/aeb73d7a-8257-3225-972e-99307b3a5cb0 * # green straight through 2, gunk on camera
+train2/ebe7a98b-d383-343b-96d6-9e681e2c6a36 # not very interesting, red to green pittsburgh intersection
+train2/fa0b626f-03df-35a0-8447-021088814b8b * # red to green but someone cuts us off.. might be interesting
+train2/fb471bd6-7c81-3d93-ad12-ac54a28beb84 # green the whole time, we make a left
+train3/02cf0ce1-699a-373b-86c0-eb6fd5f4697a * # lens flare on the lens
+train3/08a8b7f0-c317-3bdb-b3dc-b7c9b6d033e2 # boring tl same intersection
+train3/9da4ca63-f524-3b38-8c8b-624f17518574 # construction turns a 4 way into a T
+train3/49d66e75-3ce6-316b-b589-f659c7ef5e6d # boring straight through green
+train3/52af191b-ba56-326c-b569-e37790db40f3 # boring straight through green
+train3/919be600-da69-3f09-b0fd-f42f7eb2e097 # red to green straight through
+train3/74750688_7475_7475_7475_474752397312 # red to green boring miami
+train3/75756160_7575_7575_7575_675757273088 # left turn through green to stopped & blocked red light
+train3/cd38ac0b-c5a6-3743-a148-f4f7b804ed17 # straignth through 2 greens, miami
+train3/de777454-df62-3d5a-a1ce-2edb5e5d4922 * # weird tl, boring straight through green tho
+train4/2d12da1d-5238-3870-bfbc-b281d5e8c1a1 # red to green, same ol boring intersection (car to the left)
+val/7d37fc6b-1028-3f6f-b980-adb5fa73021e # first through green, then stuck b/c left turn to yellow to red
