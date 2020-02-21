@@ -1,54 +1,40 @@
+# Copyright 2019 ikhatri@umass.edu, sparr@umass.edu
+# College of Information and Computer Sciences,
+# University of Massachusetts Amherst
+# Resource-Bounded Reasoning Lab
+
+# Imports
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from pgmpy.models import DynamicBayesianNetwork as DBN
-from pgmpy.factors.discrete import TabularCPD as cpd
-from pgmpy.inference.dbn_inference import DBNInference
-from pgmpy.inference.ExactInference import VariableElimination
-def setup_model(filepath: Path):
+import theano
+import theano.tensor as tt
+import pymc3 as pm
+import matplotlib.pyplot as plt
+
+def setup_model(filepath: Path, epsilon: float=0):
     """
     TODO: Documentation
     """
-    labeled_dataframe= pd.read_csv(filepath)
+    labeled_dataframe = pd.read_csv(filepath)
     labeled_dataframe.set_index('states', inplace=True)
-    model_weights = labeled_dataframe.to_numpy()
-    print(model_weights)
+    model_weights = labeled_dataframe.to_numpy(dtype = np.float)
+    model_weights = (1-epsilon)*model_weights + np.full_like(model_weights, epsilon)
     return model_weights
 
-def setup_traffic_DBN(filepath: Path):
-    dbn = DBN()
-
-    light_model = setup_model(filepath.joinpath('light_model.csv'))
-    dbn.add_node('Traffic Light')
-    dbn.add_edge(('Traffic Light', 0), ('Traffic Light', 1))
-    print(dbn)
-    # print(dbn.edges())
-    light_CPD = cpd(('Traffic Light', 1), 3, light_model,
-                        evidence = [('Traffic Light', 0)],
-                        evidence_card = [3])
-    light_prior = cpd(('Traffic Light', 0), 3, [[.33,.33,.34]])
-    # print(light_CPD)
-    dbn.add_cpds(light_CPD)
-    return dbn
-def setup_inference_example_DBN():
+def setup_backbone_DBN(filepath: Path, t = 15):
+    system = setup_model(filepath.joinpath('system_model.csv'), epsilon = .01)
+    our_light = setup_model(filepath.joinpath('our_light_model.csv'), epsilon = .005)
+    cross  = setup_model(filepath.joinpath('cross_light_model.csv'),  epsilon = .005)
+    vision = setup_model(filepath.joinpath('vision_evidence.csv'), epsilon = .08)
     pass
-def get_inference_model(model: DBN):
-    print("preNodes", str(model.nodes(data = True)))
-    model.initialize_initial_state()
-    print("postNodes", str(model.nodes(data = True)))
-    print(model.cpds)
-    # for c in model.cpds:
-    #     print(c.variable)
-    #     print(c.values.shape)
-    #     print(c.variables)
-    return VariableElimination(model)
 
 if __name__ == "__main__":
-    dbn = setup_traffic_DBN(Path('params'))
-    # for c in dbn.cpds:
-    #     print(type(c))
-    #     print(c.variables)
-    # print(dbn.check_model())
-    traffic_inference_model = get_inference_model(dbn)
-    print("graph", dbn.graph)
-    print(traffic_inference_model.map_query(variables=[('Traffic Light', 1)], evidence={('Traffic Light', 0): 0}))
+    with pm.Model() as m:
+        arr = np.array([[.1,.9],[.9,.1]])
+        a = pm.Categorical('a', p=[0.5, 0.5])
+        b = pm.Deterministic('b', theano.shared(arr)[a,:])
+        c = pm.Categorical('c', b)
+        trace = pm.sample(10000)
+
+        print(trace['a'])

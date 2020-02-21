@@ -4,9 +4,9 @@ channels:
 dependencies:
   - python=3.7
   - pip
-  - pandas=0.24.2
+  - pandas=0.25
   - numpy=1.16.4
   - pip:
-    - tensorflow==2.0
+    - pymc3
     - mayavi==4.7.1
     - pgmpy==0.1.9
