@@ -168,7 +168,7 @@ def setup_car_cpds(filepath: Path, car_id, light):
     vel_evidence_CPD = cpd((vel_evidence, 0), 3, vel_evidence_model,
                         evidence = [(velocity, 0)],
                         evidence_card = [3])
-    vel_evidence_CPD.normalize()                    
+    vel_evidence_CPD.normalize()
     cpds = [driver_CPD, velocity_prior, velocity_CPD, position_prior, position_CPD, pos_evidence_CPD, vel_evidence_CPD]
     return nodes, edges, cpds
 
@@ -188,15 +188,15 @@ def setup_backbone_DBN(filepath: Path):
                         (('Light System', 0), (cross_light, 0))])
     system_prior = cpd(('Light System', 0), 6, [[.16,.16,.16,.16,.16,.16]])
     system_prior.normalize()
-    system_CPD = cpd(('Light System', 1), 6, system_model, 
+    system_CPD = cpd(('Light System', 1), 6, system_model,
                      evidence = [('Light System', 0)],
                      evidence_card = [6])
     system_CPD.normalize()
-    our_light_CPD = cpd((our_light, 0), 3, our_model, 
+    our_light_CPD = cpd((our_light, 0), 3, our_model,
                      evidence = [('Light System', 0)],
                      evidence_card = [6])
     our_light_CPD.normalize()
-    cross_light_CPD = cpd((cross_light, 0), 3, cross_model, 
+    cross_light_CPD = cpd((cross_light, 0), 3, cross_model,
                      evidence = [('Light System', 0)],
                      evidence_card = [6])
     cross_light_CPD.normalize()
