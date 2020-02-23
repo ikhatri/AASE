@@ -1,54 +1,76 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from pgmpy.models import DynamicBayesianNetwork as DBN
-from pgmpy.factors.discrete import TabularCPD as cpd
-from pgmpy.inference.dbn_inference import DBNInference
-from pgmpy.inference.ExactInference import VariableElimination
-def setup_model(filepath: Path):
+import pomegranate as pom
+import timeit
+
+def load_cpt(filepath: Path, epsilon: float=0):
     """
     TODO: Documentation
     """
-    labeled_dataframe= pd.read_csv(filepath)
+    labeled_dataframe = pd.read_csv(filepath)
     labeled_dataframe.set_index('states', inplace=True)
-    model_weights = labeled_dataframe.to_numpy()
-    print(model_weights)
+    model_weights = labeled_dataframe.to_numpy(dtype = np.float)
+    model_weights = (1-epsilon)*model_weights + np.full_like(model_weights, epsilon)
     return model_weights
 
-def setup_traffic_DBN(filepath: Path):
-    dbn = DBN()
-
-    light_model = setup_model(filepath.joinpath('light_model.csv'))
-    dbn.add_node('Traffic Light')
-    dbn.add_edge(('Traffic Light', 0), ('Traffic Light', 1))
-    print(dbn)
-    # print(dbn.edges())
-    light_CPD = cpd(('Traffic Light', 1), 3, light_model,
-                        evidence = [('Traffic Light', 0)],
-                        evidence_card = [3])
-    light_prior = cpd(('Traffic Light', 0), 3, [[.33,.33,.34]])
-    # print(light_CPD)
-    dbn.add_cpds(light_CPD)
-    return dbn
-def setup_inference_example_DBN():
-    pass
-def get_inference_model(model: DBN):
-    print("preNodes", str(model.nodes(data = True)))
-    model.initialize_initial_state()
-    print("postNodes", str(model.nodes(data = True)))
-    print(model.cpds)
-    # for c in model.cpds:
-    #     print(c.variable)
-    #     print(c.values.shape)
-    #     print(c.variables)
-    return VariableElimination(model)
+def load_cpt_pom(filepath: Path, epsilon: float=0):
+    labeled_dataframe = pd.read_csv(filepath)
+    states = list(labeled_dataframe.states.values)[1:]
+    labeled_dataframe.set_index('states', inplace=True)
+    model_weights = labeled_dataframe.to_numpy(dtype = np.float)
+    model_weights = (1-epsilon)*model_weights + np.full_like(model_weights, epsilon)
+    cpt = []
+    for i, s1 in enumerate(states):
+        for j, s2 in enumerate(list(labeled_dataframe.columns.values)):
+            temp = s2.split('|') + [s1, model_weights[i, j]]
+            cpt.append(temp)
+    return cpt
 
 if __name__ == "__main__":
-    dbn = setup_traffic_DBN(Path('params'))
-    # for c in dbn.cpds:
-    #     print(type(c))
-    #     print(c.variables)
-    # print(dbn.check_model())
-    traffic_inference_model = get_inference_model(dbn)
-    print("graph", dbn.graph)
-    print(traffic_inference_model.map_query(variables=[('Traffic Light', 1)], evidence={('Traffic Light', 0): 0}))
+    start = timeit.default_timer()
+    filepath = Path('params')
+
+    # Load CPTs
+    light_base_cpt = load_cpt_pom(filepath.joinpath('single_light_model.csv'), epsilon=.02)
+    velocity_base_cpt = load_cpt_pom(filepath.joinpath('velocity_model.csv'), epsilon=.03)
+    position_base_cpt = load_cpt_pom(filepath.joinpath('position_model.csv'), epsilon=.01)
+    driver_base_cpt = load_cpt_pom(filepath.joinpath('driver_model.csv'), epsilon=.01)
+    light_prior = pom.DiscreteDistribution({'red': 1./3, 'green': 1./3, 'yellow': 1./3})
+    position_prior = pom.DiscreteDistribution({'at': 1/4, 'left': 1/4, 'straight': 1/4, 'right': 1/4})
+    velocity_prior = pom.DiscreteDistribution({'zero': 1./3, 'low': 1./3, 'med': 1./3})
+
+    driver_cpt = pom.ConditionalProbabilityTable(driver_base_cpt, [light_prior, position_prior, velocity_prior])
+    light_cpt = pom.ConditionalProbabilityTable(light_base_cpt, [light_prior])
+    velocity_cpt = pom.ConditionalProbabilityTable(velocity_base_cpt, [velocity_prior, driver_cpt])
+    position_cpt = pom.ConditionalProbabilityTable(position_base_cpt, [driver_cpt, position_prior, velocity_cpt])
+
+    # Time slice 0
+    light_node0 = pom.Node(light_prior, name='light_node0')
+    position_node0 = pom.Node(position_prior, name='position_node0')
+    velocity_node0 = pom.Node(velocity_prior, name='velocity_node0')
+    driver_node0 = pom.Node(driver_cpt, name='driver_node0')
+
+    # Time slice 1
+    light_node1 = pom.Node(light_cpt, name='light_node1')
+    velocity_node1 = pom.Node(velocity_cpt, name='velocity_node1')
+    position_node1 = pom.Node(position_cpt, name='position_node1')
+
+    # Add edges
+    model = pom.BayesianNetwork('Single Slice Light')
+    model.add_states(light_node0, position_node0, velocity_node0, light_node1, driver_node0, velocity_node1, position_node1)
+    model.add_edge(light_node0, light_node1)
+    model.add_edge(light_node0, driver_node0)
+    model.add_edge(position_node0, driver_node0)
+    model.add_edge(velocity_node0, driver_node0)
+    model.add_edge(velocity_node0, position_node1)
+    model.add_edge(velocity_node0, velocity_node1)
+    model.add_edge(position_node0, position_node1)
+    model.add_edge(driver_node0, velocity_node1)
+    model.add_edge(driver_node0, position_node1)
+    model.bake()
+    # All the program statements
+    stop = timeit.default_timer()
+    execution_time = stop - start
+
+    print("Program Executed in "+str(execution_time)) # It returns time in seconds

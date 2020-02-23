@@ -1,7 +1,7 @@
-states,Redred,redRed,greenred,yellowred,redgreen,redyellow
-Redred,.2,0,0,0,0,.25
-redRed,0,.2,0,.25,0,0
-greenred,.8,0,.95,0,0,0
-yellowred,0,0,.05,.75,0,0
-redgreen,0,.8,0,0,.95,0
-redyellow,0,0,0,0,.05,.75
+states,Red_red,red_Red,green_red,yellow_red,red_green,red_yellow
+Red_red,0.2,0,0,0,0,0.25
+red_Red,0,0.2,0,0.25,0,0
+green_red,0.8,0,0.95,0,0,0
+yellow_red,0,0,0.05,0.75,0,0
+red_green,0,0.8,0,0,0.95,0
+red_yellow,0,0,0,0,0.05,0.75

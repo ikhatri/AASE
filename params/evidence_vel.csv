@@ -1,4 +1,4 @@
-states,zero,slow,fast
+states,zero,slow,med
 zero,1,0,0
 slow,0,1,0
-fast,0,0,1
+med,0,0,1

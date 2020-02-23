@@ -1,4 +1,4 @@
-states,zlp,zsp,zrp,zlz,zsz,zrz,zlm,zsm,zrm,llp,lsp,lrp,llz,lsz,lrz,llm,lsm,lrm,mlp,msp,mrp,mlz,msz,mrz,mlm,msm,mrm 
+states,zero|left_plus,zero|straight_plus,zero|right_plus,zero|left_zero,zero|straight_zero,zero|right_zero,zero|left_minus,zero|straight_minus,zero|right_minus,low|left_plus,low|straight_plus,low|right_plus,low|left_zero,low|straight_zero,low|right_zero,low|left_minus,low|straight_minus,low|right_minus,med|left_plus,med|straight_plus,med|right_plus,med|left_zero,med|straight_zero,med|right_zero,med|left_minus,med|straight_minus,med|right_minus
 zero,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
 low,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1
 med,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0

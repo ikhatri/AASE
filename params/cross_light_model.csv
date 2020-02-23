@@ -1,4 +1,4 @@
-states,Redred,redRed,greenred,yellowred,redgreen,redyellow
+states,Red_red,red_Red,green_red,yellow_red,red_green,red_yellow
 red,1,1,1,1,0,0
 green,0,0,0,0,1,0
 yellow,0,0,0,0,0,1
