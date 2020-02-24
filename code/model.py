@@ -225,6 +225,8 @@ def add_cars_DBN(filepath: Path, backbone_dbn, our_light, cross_light, adj_car_i
 
     return backbone_dbn
 
+def init_DBN(filepath: Path, adj_car_ids, cross_car_ids):
+    dbn, our_light, cross_light = setup_backbone_DBN(filepath)
 
 def get_inference_model(model: DBN):
     model.initialize_initial_state()
