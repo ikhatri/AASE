@@ -280,6 +280,17 @@ def build_evidence(obj_id: int, data_dict: dict) -> dict:
         evidence_dict[('Velocity', t)] = data_dict[obj_id][t]['discrete_vel']
     return evidence_dict
 
+def new_build_evidence(obj_id: int, data_dict: dict, timestep: int = -1) -> dict:
+    evidence_dict = {}
+    if timestep < 0:
+        for t in data_dict[obj_id]:
+            evidence_dict[str(obj_id)+"_evidence_pos_"+str(t)] = data_dict[obj_id][t]['discrete_pos']
+            evidence_dict[str(obj_id)+"_evidence_vel_"+str(t)] = data_dict[obj_id][t]['discrete_vel']
+    else:
+        evidence_dict[str(obj_id)+"_evidence_pos_"+str(timestep)] = data_dict[obj_id][timestep]['discrete_pos']
+        evidence_dict[str(obj_id)+"_evidence_vel_"+str(timestep)] = data_dict[obj_id][timestep]['discrete_vel']
+    return evidence_dict
+
 def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end_time: int):
     data = get_relevant_trajectories(city_map, argoverse_data, end_time)
     data = compute_velocity(data, end_time)
