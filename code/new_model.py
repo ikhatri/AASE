@@ -264,7 +264,7 @@ def predict_DBN(dbn, names, evidence, timestep, iterations = 10):
     return next_belief
 if __name__ == "__main__":
     start = timeit.default_timer()
-    filepath = Path('AASE/params')
+    filepath = Path('params')
     dbn, names = init_DBN(filepath, [0,1,2], [3,4])
     dbn.bake()
     evidence_1 =  {'0_evidence_pos_1': 'at', '0_evidence_vel_1': 'med',

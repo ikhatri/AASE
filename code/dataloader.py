@@ -280,13 +280,9 @@ def build_evidence(obj_id: int, data_dict: dict) -> dict:
         evidence_dict[('Velocity', t)] = data_dict[obj_id][t]['discrete_vel']
     return evidence_dict
 
-def new_build_evidence(obj_id: int, data_dict: dict, timestep: int = -1) -> dict:
+def new_build_evidence(obj_ids: list, data_dict: dict, timestep: int) -> dict:
     evidence_dict = {}
-    if timestep < 0:
-        for t in data_dict[obj_id]:
-            evidence_dict[str(obj_id)+"_evidence_pos_"+str(t)] = data_dict[obj_id][t]['discrete_pos']
-            evidence_dict[str(obj_id)+"_evidence_vel_"+str(t)] = data_dict[obj_id][t]['discrete_vel']
-    else:
+    for obj_id in obj_ids:
         evidence_dict[str(obj_id)+"_evidence_pos_"+str(timestep)] = data_dict[obj_id][timestep]['discrete_pos']
         evidence_dict[str(obj_id)+"_evidence_vel_"+str(timestep)] = data_dict[obj_id][timestep]['discrete_vel']
     return evidence_dict
@@ -331,6 +327,19 @@ def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_
                 discr_evidence_dict[(t[0]+"_Evidence_"+str(obj_id),timestep+1)] = evidence_dict[o][t]
 
     return discr_evidence_dict
+def convert_pgmpy_pom(evidence_key, evidence_value):
+    label = evidence_key[0]
+    obj_id = label[-1]
+    timestep = evidence_key[1]
+    index = evidence_value
+    if "Pos" in label:
+        new_label = str(obj_id)+"_evidence_pos_"+str(timestep)
+        new_value = ["at", "left", "straight", "right"][index]
+    else:
+        new_label = str(obj_id)+"_evidence_vel_"+str(timestep)
+        new_value = ["zero", "low", "med"][index]
+    return new_label, new_value, timestep
+
 if __name__ == "__main__":
     end_time = 150
     interval = 10
@@ -338,10 +347,14 @@ if __name__ == "__main__":
     mappymap = ArgoverseMap()
     # visualize(mappymap, d, end_time)
     evidence_dict = get_evidence(mappymap, d, end_time)
+    pom_evidence_dict = {}
     for i in range(len(evidence_dict)):
         discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
         for t in discr_evidence_dict:
-            print(t, discr_evidence_dict[t])
+            key, value = convert_pgmpy_pom(t, discr_evidence_dict[t])
+            print(key, value)
+            pom_evidence_dict[key] = value
+    print(pom_evidence_dict)
 
 
 
