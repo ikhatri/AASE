@@ -245,23 +245,26 @@ def iterate_DBN(filepath: Path, adj_car_ids: list, cross_car_ids: list, prev_bel
             car_beliefs[car_id]['vel'] = pom.DiscreteDistribution(prev_beliefs[s_car_id + "_velocity_" + s_iter])
         else:
             car_beliefs[car_id]['vel'] = pom.DiscreteDistribution({'zero': 1./3, 'low': 1./3, 'med': 1./3})
-    
+
     dbn, our_light, cross_light, our_light_belief, cross_light_belief, names = build_backbone_DBN_slice(filepath, system_prior, iter)
     dbn, names = add_cars_DBN(filepath, dbn, our_light, cross_light, adj_car_ids, cross_car_ids, our_light_belief, cross_light_belief, car_beliefs, names, iter)
 
     return dbn, names
 
-def predict_DBN(dbn, names, evidence, timestep, iterations = 10):
-    y_hat = dbn.predict_proba(X = evidence, max_iterations = iterations)
+def predict_DBN(dbn, names, evidence, timestep, iterations = 10, jobs=1):
+    y_hat = dbn.predict_proba(X = evidence, max_iterations = iterations, n_jobs=jobs)
     next_belief = {}
+    our_light = []
     for i,y in enumerate(y_hat):
         if "system_"+str(timestep) in names[i] or \
            "position_"+str(timestep) in names[i] or \
            "velocity_"+str(timestep) in names[i]:
             next_belief[names[i]] = y.parameters[0]
         if "our_light_"+str(timestep) in names[i]:
-            print(y.parameters[0])
-    return next_belief
+            our_light.append(y.parameters[0])
+            # print(y.parameters[0])
+    return next_belief, our_light
+
 if __name__ == "__main__":
     start = timeit.default_timer()
     filepath = Path('params')
@@ -277,7 +280,7 @@ if __name__ == "__main__":
                                    '2_evidence_pos_2': 'straight', '2_evidence_vel_2': 'low',
                                    '3_evidence_pos_2': 'at', '3_evidence_vel_2': 'zero',
                                    '4_evidence_pos_2': 'at', '4_evidence_vel_2': 'zero'}
-    
+
     next_belief = predict_DBN(dbn, names, evidence_1, 1)
     new_dbn, names = iterate_DBN(filepath, [0,1,2], [3,4], next_belief, 1)
     new_dbn.bake()
