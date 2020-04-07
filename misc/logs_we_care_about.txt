@@ -1,8 +1,8 @@
-train1/1d676737-4110-3f7e-bec0-0c90f74c248f * # multiple greens, adj cars blow past
+train1/1d676737-4110-3f7e-bec0-0c90f74c248f * # multiple greens, adj cars blow past // (skipped for now)
 train1/64c12551-adb9-36e3-a0c1-e43a0e9f3845 * # light obscured by glare, cars in front
-train1/70d2aea5-dbeb-333d-b21e-76a7f2f1ba1c * # light with stopped cars and Y shaped intersection
-train1/84c35ea7-1a99-3a0c-a3ea-c5915d68acbc * # miami... it's a mess
-train1/53037376_5303_5303_5303_553038557184 * # no traffic light, the glare will make the CNN fail though
+train1/70d2aea5-dbeb-333d-b21e-76a7f2f1ba1c * # light with stopped cars and Y shaped intersection // (skipped for now)
+train1/84c35ea7-1a99-3a0c-a3ea-c5915d68acbc * # miami... it's a mess // (skipped for now)
+train1/53037376_5303_5303_5303_553038557184 * # no traffic light, the glare will make the CNN fail though // (skipped for now)
 train1/b1ca08f1-24b0-3c39-ba4e-d5a92868462c * # best one yet, lots of cross traffic that stops before light turns green
 train2/5c251c22-11b2-3278-835c-0cf3cdee3f44 # no traffic light, but cross traffic at a stop sign so we could apply it anyway?
 train2/10b3a1d8-e56c-38be-aaf7-ef2f862a5c4e # traffic light and through traffic
