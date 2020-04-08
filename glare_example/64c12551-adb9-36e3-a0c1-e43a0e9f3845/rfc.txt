@@ -1,0 +1,2085 @@
+Demo
+net.optimized_memory = 0 
+batch = 1, time_steps = 1, train = 0 
+
+ seen 64, trained: 1024 K-images (16 Kilo-batches_64) 
+video file: /home/ikhatri/argoverse/argoverse-api/argoverse-tracking/train1/64c12551-adb9-36e3-a0c1-e43a0e9f3845/rfc.mp4
+Video stream: 1920 x 1200 
+Objects:
+
+
+FPS:0.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:7.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:13.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:19.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:24.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:28.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:32.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:36.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:39.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:42.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:45.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:48.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:51.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:53.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:56.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:59.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:60.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:62.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:64.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:66.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:67.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:69.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:70.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:71.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:72.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:73.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:73.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:74.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:75.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:76.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:76.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:76.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:77.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:82.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:82.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:82.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:78.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:79.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:0.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.4 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 31% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 43% 
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 31% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:82.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 53% 
+
+FPS:82.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 61% 
+
+FPS:82.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 65% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 68% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 43% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 26% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 49% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 81% 
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 87% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 84% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 80% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 77% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 61% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 50% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 34% 
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 42% 
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 44% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 69% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 55% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 82% 
+
+FPS:82.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 80% 
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 66% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 62% 
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 39% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 57% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 55% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 61% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 55% 
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 57% 
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 30% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 69% 
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 85% 
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 63% 
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 64% 
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:79.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.1 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 64% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:80.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 28% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 37% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 26% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 37% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 56% 
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 53% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 75% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 75% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 73% 
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 64% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 50% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 47% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 44% 
+
+FPS:82.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 53% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 86% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 51% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 70% 
+
+FPS:82.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 79% 
+
+FPS:82.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 84% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 86% 
+
+FPS:82.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 46% 
+
+FPS:82.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 29% 
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 35% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 39% 
+
+FPS:82.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 39% 
+
+FPS:82.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 44% 
+
+FPS:82.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 37% 
+
+FPS:82.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 44% 
+
+FPS:82.0 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 30% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 32% 
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 80% 
+
+FPS:81.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 39% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 60% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 41% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 82% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 73% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 78% 
+Green: 35% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 86% 
+Green: 32% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 95% 
+Green: 71% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 92% 
+Green: 84% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 87% 
+Green: 70% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 86% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 74% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 80% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 72% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 81% 
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 84% 
+Green: 35% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 84% 
+Green: 50% 
+
+FPS:80.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 92% 
+Green: 89% 
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 93% 
+Green: 84% 
+
+FPS:80.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 93% 
+Green: 64% 
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 92% 
+Green: 65% 
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 88% 
+Green: 56% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 95% 
+Green: 70% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+Green: 48% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+Green: 43% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 95% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 93% 
+
+FPS:81.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+
+FPS:81.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 53% 
+
+FPS:81.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 79% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 85% 
+
+FPS:81.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 90% 
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 100% 
+Green: 91% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 91% 
+
+FPS:80.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 98% 
+Green: 90% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 96% 
+Green: 94% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 94% 
+Green: 71% 
+
+FPS:80.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 91% 
+Green: 88% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+Green: 69% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 98% 
+Green: 73% 
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 98% 
+Green: 63% 
+
+FPS:80.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 76% 
+
+FPS:80.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 89% 
+
+FPS:80.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 88% 
+
+FPS:80.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 87% 
+
+FPS:79.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 100% 
+Green: 87% 
+
+FPS:80.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 100% 
+Green: 82% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 100% 
+Green: 92% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 100% 
+Green: 28% 
+
+FPS:80.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 100% 
+Green: 62% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 99% 
+Green: 65% 
+
+FPS:80.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 98% 
+Green: 68% 
+
+FPS:80.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 98% 
+Green: 66% 
+
+FPS:79.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 91% 
+Green: 76% 
+
+FPS:73.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+Green: 73% 
+
+FPS:71.6 	 AVG_FPS:80.0
+Objects:
+
+Green: 91% 
+Green: 57% 
+
+FPS:71.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 70% 
+Green: 29% 
+
+FPS:72.1 	 AVG_FPS:80.0
+Objects:
+
+Green: 52% 
+
+FPS:72.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 26% 
+
+FPS:74.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 61% 
+
+FPS:74.9 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:75.3 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:75.4 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:75.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 35% 
+
+FPS:76.2 	 AVG_FPS:80.0
+Objects:
+
+
+FPS:76.9 	 AVG_FPS:80.0
+Objects:
+
+Red: 42% 
+
+FPS:76.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 40% 
+
+FPS:77.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 55% 
+
+FPS:78.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 49% 
+Red: 61% 
+
+FPS:78.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 74% 
+Red: 32% 
+
+FPS:78.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 43% 
+Red: 42% 
+
+FPS:78.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 75% 
+Red: 75% 
+
+FPS:79.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 87% 
+Red: 60% 
+
+FPS:79.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 57% 
+
+FPS:79.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 79% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 80% 
+
+FPS:80.4 	 AVG_FPS:80.0
+Objects:
+
+Green: 82% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 88% 
+
+FPS:80.3 	 AVG_FPS:80.0
+Objects:
+
+Green: 69% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 73% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 93% 
+
+FPS:80.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 92% 
+
+FPS:81.0 	 AVG_FPS:80.0
+Objects:
+
+Green: 88% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 94% 
+
+FPS:81.7 	 AVG_FPS:80.0
+Objects:
+
+Green: 81% 
+
+FPS:81.5 	 AVG_FPS:80.0
+Objects:
+
+Green: 95% 
+
+FPS:82.2 	 AVG_FPS:80.0
+Objects:
+
+Green: 97% 
+
+FPS:81.9 	 AVG_FPS:80.0
+Objects:
+
+Green: 95% 
+
+FPS:81.8 	 AVG_FPS:80.0
+Objects:
+
+Green: 66% 
+
+FPS:82.2 	 AVG_FPS:80.0
+Stream closed.
+input video stream closed. 

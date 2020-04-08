@@ -1,4 +1,4 @@
-# Copyright 2019 ikhatri@umass.edu, sparr@umass.edu
+# Copyright 2019-2020 ikhatri@umass.edu, sparr@umass.edu
 # College of Information and Computer Sciences,
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
@@ -10,6 +10,7 @@ from pgmpy.models import DynamicBayesianNetwork as DBN
 from pgmpy.factors.discrete import TabularCPD as cpd
 from pgmpy.inference.dbn_inference import DBNInference
 from pgmpy.inference.ExactInference import VariableElimination, BeliefPropagation
+
 def setup_model(filepath: Path, epsilon: float=0):
     """
     TODO: Documentation
@@ -223,8 +224,10 @@ def add_cars_DBN(filepath: Path, backbone_dbn, our_light, cross_light, adj_car_i
         backbone_dbn.add_cpds(*cpds)
 
     return backbone_dbn
-        
-    
+
+def init_DBN(filepath: Path, adj_car_ids, cross_car_ids):
+    dbn, our_light, cross_light = setup_backbone_DBN(filepath)
+
 def get_inference_model(model: DBN):
     model.initialize_initial_state()
     print(model.get_inter_edges())

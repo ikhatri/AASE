@@ -1,4 +1,4 @@
-# Copyright 2019 ikhatri@umass.edu, sparr@umass.edu
+# Copyright 2019-2020 ikhatri@umass.edu, sparr@umass.edu
 # College of Information and Computer Sciences,
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
@@ -8,6 +8,8 @@ import os
 import logging
 import numpy as np
 import math
+import re
+import json
 from mayavi import mlab
 from pathlib import Path
 from collections import defaultdict
@@ -24,7 +26,7 @@ logger = logging.getLogger(__name__)
 def load_all_logs(data_dir: Path) -> ArgoverseTrackingLoader:
     return ArgoverseTrackingLoader(data_dir)
 
-def draw_3d_bbox(bbox: np.ndarray) -> None:
+def draw_3d_bbox(bbox: np.ndarray, color: tuple=(1, 0, 0)) -> None:
     """
     A dumb helper function to quickly plot a 3D bounding box in mayavi mlab
     """
@@ -43,7 +45,7 @@ def draw_3d_bbox(bbox: np.ndarray) -> None:
         [3, 7],  # Connections between upper and lower planes
     ]
     for connection in connections:
-        mlab.plot3d(bbox[connection, :1], bbox[connection, 1:2], bbox[connection, 2:3], color=(1, 0, 0), tube_radius=None)
+        mlab.plot3d(bbox[connection, :1], bbox[connection, 1:2], bbox[connection, 2:3], color=color, tube_radius=None)
 
 def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end: int) -> dict:
     """
@@ -65,31 +67,14 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
             }
         }
     """
-    # a set of the object IDs, must be unique
-    unique_id_list = set()
-    # loop through all the objects and get the track id for each one
-    for i in range(len(argoverse_data.label_list)):
-        for label in argoverse_data.get_label_object(i):
-            unique_id_list.add(label.track_id)
-
-    # get a list of all the objects in the final time step
-    objects = argoverse_data.get_label_object(end)
-
-    # make a subset of the unique id list that contains only visible tracks
-    visible_track_id = set()
-    for obj in objects:
-        if obj.occlusion == 100:
-            continue
-        visible_track_id.add(obj.track_id)
-
     # get the current pose of the vehicle
     current_pose = argoverse_data.get_pose(end)
 
-    # traj_by_id: Dict[Optional[str], List[Any]] = defaultdict(list)
+    traj_by_id: Dict[Optional[str], List[Any]] = defaultdict(list)
     data_dict = defaultdict(dict)
 
     # a list of np array (x, y) coordinates of the trajectory up till i
-    traj_till_now = []
+    # traj_till_now = []
 
     for i in range(0, end, 1):
         # Checks for valid pose
@@ -111,7 +96,7 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
             # ignore occluded objects
             if obj.occlusion == 100:
                 continue
-            if obj.track_id is None: # or obj.track_id not in visible_track_id:
+            if obj.track_id is None:
                 continue
 
             # get the x, y and z coords of the object with respect to the vehicle at timestep i
@@ -127,11 +112,13 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
             # check if x,y is in a segment not controlled by traffic control
             intersecting_lane_ids = city_map.get_lane_segments_containing_xy(x, y, argoverse_data.city_name)
             traffic_control = False
-            for lane_id in intersecting_lane_ids:
-                successor_lane_ids = city_map.get_lane_segment_successor_ids(lane_id, argoverse_data.city_name)
-                for succ_lane in successor_lane_ids:
-                    if city_map.lane_has_traffic_control_measure(lane_id, argoverse_data.city_name) or city_map.lane_has_traffic_control_measure(succ_lane, argoverse_data.city_name):
-                        traffic_control = True
+            if intersecting_lane_ids:
+                for lane_id in intersecting_lane_ids:
+                    successor_lane_ids = city_map.get_lane_segment_successor_ids(lane_id, argoverse_data.city_name)
+                    if successor_lane_ids:
+                        for succ_lane in successor_lane_ids:
+                            if city_map.lane_has_traffic_control_measure(lane_id, argoverse_data.city_name) or city_map.lane_has_traffic_control_measure(succ_lane, argoverse_data.city_name):
+                                traffic_control = True
 
             if not traffic_control:
                 continue
@@ -139,9 +126,9 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
             # Find the segment that the car is most likely to be following
             data_dict[obj.track_id][i] = {}
             data_dict[obj.track_id][i]['candidate_segments'] = intersecting_lane_ids[:]
-            traj_till_now.append(np.array([x, y]))
+            traj_by_id[obj.track_id].append(np.array([x, y]))
             candidate_centerlines = [city_map.get_lane_segment_centerline(s, argoverse_data.city_name) for s in intersecting_lane_ids]
-            best_fit_centerline = get_oracle_from_candidate_centerlines(candidate_centerlines, np.array(traj_till_now))
+            best_fit_centerline = get_oracle_from_candidate_centerlines(candidate_centerlines, np.array(traj_by_id[obj.track_id]))
 
             oracle_segment = 0
             for k, c in enumerate(candidate_centerlines):
@@ -156,8 +143,8 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
 
             # The check is done by computing the angle between
             # the car's velocity and the direction of the lane
-            if i > 1:
-                vel_vector = np.array([x, y])-traj_till_now[-2]
+            if len(traj_by_id[obj.track_id]) > 1:
+                vel_vector = np.array([x, y])-traj_by_id[obj.track_id][-2]
                 if np.dot(lane_dir_vector, vel_vector) < 0:
                     p = i-1
                     while p not in data_dict[obj.track_id] and p >= 0:
@@ -180,7 +167,7 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
 
     return data_dict
 
-def visualize(argo_maps: ArgoverseMap, argo_data: ArgoverseTrackingLoader, end_time: int, plot_trajectories: bool=True, plot_lidar: bool=True, plot_bbox: bool=True, plot_segments: bool=True, show: bool=True) -> None:
+def visualize(argo_maps: ArgoverseMap, argo_data: ArgoverseTrackingLoader, end_time: int, obj_ids: list=[], plot_trajectories: bool=True, plot_lidar: bool=True, plot_bbox: bool=True, plot_segments: bool=True, show: bool=True) -> None:
     """
     A function to vizualize everything in GPU accelerated 3D
 
@@ -191,18 +178,34 @@ def visualize(argo_maps: ArgoverseMap, argo_data: ArgoverseTrackingLoader, end_t
     """
     mlab.figure(bgcolor=(0.2, 0.2, 0.2))
     city_to_egovehicle_se3 = argo_data.get_pose(end_time)
-    if plot_trajectories or plot_segments:
+    if plot_trajectories or plot_segments or plot_bbox:
         data = get_relevant_trajectories(argo_maps, argo_data, end_time)
     if plot_lidar:
         pc = argo_data.get_lidar(end_time)
         pc = rotate_polygon_about_pt(pc, city_to_egovehicle_se3.rotation, np.zeros(3))
         mlab.points3d(pc[:,:1], pc[:,1:2], pc[:,2:3], mode='point')
     if plot_bbox:
+        shitty_dict = {}
         for obj in argo_data.get_label_object(end_time):
             if obj.occlusion == 100:
                 continue
-            bbox = rotate_polygon_about_pt(obj.as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3))
-            draw_3d_bbox(bbox)
+            if obj.track_id not in data:
+                color = (0, 0, 0)
+                bbox = rotate_polygon_about_pt(obj.as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3))
+                draw_3d_bbox(bbox, color=color)
+        for et in range(0, end_time):
+            all_objects = argo_data.get_label_object(et)
+            for o in all_objects:
+                if o.track_id in data:
+                    shitty_dict[o.track_id] = o
+        colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 0), (0, 1, 1), (1, 0, 1),
+                  (1,.5,.5), (.5,1,.5), (.5,.5,1), (1,1,.5), (.5,1,1), (1,.5,1) ]
+        for i, obj in enumerate(data):
+            if i in obj_ids:
+                color = colors[i%12]
+                print(i, obj, color)
+                bbox = rotate_polygon_about_pt(shitty_dict[obj].as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3))
+                draw_3d_bbox(bbox, color=color)
     if plot_trajectories:
         for o in data:
             traj = np.array([data[o][k]['position'] for k in data[o].keys()])
@@ -280,6 +283,13 @@ def build_evidence(obj_id: int, data_dict: dict) -> dict:
         evidence_dict[('Velocity', t)] = data_dict[obj_id][t]['discrete_vel']
     return evidence_dict
 
+def new_build_evidence(obj_ids: list, data_dict: dict, timestep: int) -> dict:
+    evidence_dict = {}
+    for obj_id in obj_ids:
+        evidence_dict[str(obj_id)+"_evidence_pos_"+str(timestep)] = data_dict[obj_id][timestep]['discrete_pos']
+        evidence_dict[str(obj_id)+"_evidence_vel_"+str(timestep)] = data_dict[obj_id][timestep]['discrete_vel']
+    return evidence_dict
+
 def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end_time: int):
     data = get_relevant_trajectories(city_map, argoverse_data, end_time)
     data = compute_velocity(data, end_time)
@@ -309,28 +319,80 @@ def get_discretized_evidence_for_object(evidence_dict: dict, interval: int, obj_
         discr_evidence_dict = init_evidence_dict
     for i, o in enumerate(evidence_dict):
         if i == obj_id:
-            print("evidence from id", i)
+            # print("evidence from id", i)
             for t in evidence_dict[o]:
                 if t[1] % interval != 0:
                     continue
                 timestep = t[1]//interval
                 if up_to is not None and timestep >= up_to:
                     break
-                print("("+t[0] + str(obj_id) + ", " + str(t[1]+interval)+")", evidence_dict[o][t])
+                # print("("+t[0] + str(obj_id) + ", " + str(t[1]+interval)+")", evidence_dict[o][t])
                 discr_evidence_dict[(t[0]+"_Evidence_"+str(obj_id),timestep+1)] = evidence_dict[o][t]
-
     return discr_evidence_dict
+
+def convert_pgmpy_pom(evidence_key, evidence_value):
+    label = evidence_key[0]
+    obj_id = label.split('_')[-1]
+    timestep = evidence_key[1]
+    index = evidence_value
+    if "Pos" in label:
+        new_label = str(obj_id)+"_evidence_pos_"+str(timestep)
+        new_value = ["at", "left", "straight", "right"][index]
+    else:
+        new_label = str(obj_id)+"_evidence_vel_"+str(timestep)
+        new_value = ["zero", "low", "med"][index]
+    return new_label, new_value, timestep
+
+def parse_yolo(filepath: Path):
+  data = {}
+  i = 0
+  with open(filepath, 'r') as f:
+    for l in f:
+      if l[0] == 'O':
+        i += 1
+      if l != '':
+        out = l.split()
+        if len(out) > 0:
+          if out[0] == 'Green:' or out[0] == 'Red:' or out[0] == 'Yellow:':
+            c = re.search('[0-9]+', out[1]).group(0)
+            u = data.get(i, {})
+            if max(u.values(), default=0) < int(c):
+                u.update({out[0][0]: int(c)})
+            data[i] = u
+  return i, data
+
+def yolo_to_evidence(data: dict, final_timestep: int, interval: int):
+  new_time = 0
+  vision_evidence = {}
+  colors = {'G': 'green', 'R': 'red', 'Y': 'yellow'}
+  for i in range(final_timestep):
+    if i%3==0 and i%interval==0:
+      new_time += 1
+      if i in data:
+        color = list(data[i].keys())[0]
+        vision_evidence[new_time] = {'vision_'+str(new_time+1): colors[color]}
+  return vision_evidence
+
+def load_relevant_cars(json_file: Path, subfolder: str):
+    with open(json_file) as json_data:
+        data = json.load(json_data)
+    return data[subfolder]
+
 if __name__ == "__main__":
     end_time = 150
     interval = 10
     d = load_all_logs(SAMPLE_DIR)
     mappymap = ArgoverseMap()
-    # visualize(mappymap, d, end_time)
-    evidence_dict = get_evidence(mappymap, d, end_time)
-    for i in range(len(evidence_dict)):
-        discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
-        for t in discr_evidence_dict:
-            print(t, discr_evidence_dict[t])
+    visualize(mappymap, d, end_time)
+    # evidence_dict = get_evidence(mappymap, d, end_time)
+    # pom_evidence_dict = {}
+    # for i in range(len(evidence_dict)):
+    #     discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
+    #     for t in discr_evidence_dict:
+    #         key, value = convert_pgmpy_pom(t, discr_evidence_dict[t])
+    #         print(key, value)
+    #         pom_evidence_dict[key] = value
+    # print(pom_evidence_dict)
 
 
 

@@ -129,3 +129,9 @@ dmypy.json
 
 # generic
 .DS_Store
+
+# tmp files from pomegranate
+*.pomegranate.tmp
+
+# ignore all mp4s
+*.mp4

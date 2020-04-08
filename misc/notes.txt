@@ -1,0 +1,52 @@
+agents partially observable stochastic game where agents follow known strategies, but only weakly interact. To model this non-interaction, we use a privatization function to narrow down the state space as a form of dynamic feature selection, and then use those relevant features as part of a graphical model. There is an input privatization function and an impact function. If one agent impacts a feature in another agents privatization function, then the agents are said to be interacting. Obstacles are non-agent aspects of state which may also be present in the input privatization function of an agent. If an agent is either being impacted by another agent or is reacting to an obstacle, they are said to be invalud for inference on the broader state. In short, an agent's behavior is a measure of anything in its input privatization function: if there are other agents, or obstacles present, they are primarily measuring the obstacles and not the state at large, and our simple models of single-agent behavior will fail. Thus, we ignore, or downweight these agents, depending on an interaction parameter between 0 and 1. 
+
+
+-------
+-------
+
+multi-lane model TODO:
+
+
+1 intersection selection and grabbing candidate cars #TODO EASY
+
+first, is there a simple way to only select agents present in the current intersection? Should be simple: we know which lane segment the AV is currently in, and if the next lane segment is in an intersection, do some sort of simple adjacency/point-intersection flood fill algorithm to find all active cars, and dynamically load a discretized "map" of the intersection into our decision logic. 
+
+
+2 Characterization of the light system topology from map/data #TODO MEDIUM
+
+Next: we need to count the number of intersecting total straight paths through the intersection at angle: this will be the N-number of the intersection. Additionally, we need to determine the overall type of the intersection: for each path, is it one-way, or two-way? For each direction on each path, are there turn lanes? We can be conservative here, but over-estimating the number of choices can degrade efficacy. For each path-direction-turn combination, there are light system-related questions of whether there are dedicated turn signals, whether path-directions have different light signal based on direction or on path, etc. These we will mostly punt on/make reductivist assumptions, because it can be solved with sufficiently detailed map or engineering, and it isn't really a reasoning issue. 
+
+
+3 Construction of the set of possible light system states and transition function from topology #TODO HARD
+
+Now that we have an assumed light-system configuration, We first construct a light system L, which consists of the total set C of non-physically-intersecting subsets c of path-direction-turns and the transition dynamics table D that maps C to C stochastically. We assume that any configuration c in C (including the empty set) has green or yellow lights at a given time, while the rest are red. This allows us to specify configuration activation probabilities (red to green), configuration deactivation probabilities (green to yellow), and then yellow to red probabilities which can be specified via a ratio with the original green to yellow probabilities. The most probably transitions will be randomly activating a configuration c, having it run for a while, deactivating it, experiencing the all red state, and then randomly activating a new (all green) configuration. However, more complicated transitions will be possible (although less likely), where subset configurations deactivate (decaying to a simpler configuration c'), or new path-direction-turns activate spontaneously (transitioning to a busier configuration c''). In both cases, individual path-direction-turns obey the green-yellow-red rule with overwhelming probability, and at any time the whole intersection remains in C. 
+
+
+4 Identification of blocked or interacting candidate cars and create interaction node evidence #TODO MEDIUM
+
+Now that we have the light system dynamics D across the light system L, we can create a light system node 'system' and have it transition over time, independent of any cars. We now previously identified all active cars-- now we know which lane-segment each active car is in. First, we identify which cars are blocked by obstacles or interacting with other cars. For the cars who are currently being perturbed, we turn on the interaction node which, if on, leads to semi-randomized observations of the light from the driver, and if off, leads to normal car-light observation. The key is that we can tune the semi-randomization to obstruct conditioning the light probability on the driver actions with a parameter controlling the randomization. We can totally prevent inference, or down-weight inference by increasing the randomness of the driver observations. this leads to poor forward predicting of obstructed drivers using this model, but is only used to allow inference on a sliding scale. For all drivers, the interaction node is submitted as evidence-- either it is on or off at any given time. 
+
+
+5 Create observation node for each car and integrate with interaction node and light system #TODO EASY
+
+Once we have set the values for the interaction nodes, we finally have the observation nodes. Each car has its own lane-based observation node, where the light at that particular lane is observed with high probability (assuming the interaction node is off). Then, the single-lane-light car driver model can be used in interaction with this lane-based observation node. Note that each car has a separate observation node, even if the cars are in the same lane. This is because two cars in the same lane/under the same light may be obstructed at different times or in different ways. This is reflected in the fact that they will have identical observation node types, but separate nodes. 
+
+
+6 Add/compute car evidence nodes based on real data and construct transition function to add agent nodes #PASSABLE
+
+Thus, we will have one light system node "system", and for each active car we will have an "interaction" node and an "observation" node. Then, we will have the ordinary driver system model underneath the observation node, with the "position", "velocity", "driver accel" and "driver turn" nodes. Ultimately, we get position data, which we discretize into lane segments for position and use for velocity. "driver accel" and "driver turn" nodes can be learned, or hand specified, but are compact ways of representing how drivers use the light and their own position and velocity for decision making. These can alternatively be merged into a single policy node, or be computed in series. 
+
+
+6.5 separate our observation of other agents from their internal state dynamics #TODO EASY
+
+One thing we do need to add is better separate our observation function from the internal working of the other car, by adding agent-observation nodes.
+
+
+7 integrate our own observations as evidence for an observation node #ISHAN HARD
+
+For incorporating info from one or multiple visual sources at various times, we can create an "observation" node of the type for the lane of our car, and then set the distribution over that node to be that of the output of some model, like a resnet, on the images of the traffic light. The transitions for this node based on the light system can be equal in confidence to that of other cars, or we can prefer to use our own sensors, or even downweight our own sensors to that of other cars. Alternatively, if variational inference was used, we can directly use our own confidence of our observation to dynamically downweight or upweight our observations vs those of other cars. 
+
+
+8 do inference #PASSABLE
+
+We could use junction tree model, which is exact inference over the DBN structure, use MCMC over an unrolled DBN as a BN for approximate inference, or use variational inference over an unrolled DBN as a BN for approximate inference. All three should be explored, but currently junction tree exact inference is working on single cars at good enough speeds. As we add more cars/dedicated evidence nodes, this might change.

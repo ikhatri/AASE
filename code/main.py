@@ -1,4 +1,4 @@
-# Copyright 2019 ikhatri@umass.edu, sparr@umass.edu
+# Copyright 2019-2020 ikhatri@umass.edu, sparr@umass.edu
 # College of Information and Computer Sciences,
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
@@ -6,7 +6,7 @@
 from matplotlib import pyplot as plt
 from pathlib import Path
 import logging
-from dataloader import load_all_logs, get_evidence, get_discretized_evidence_for_object, visualize, get_evidence_start_and_finish_for_object
+from dataloader import load_all_logs, get_evidence, get_discretized_evidence_for_object, visualize, get_evidence_start_and_finish_for_object, new_build_evidence
 from argoverse.map_representation.map_api import ArgoverseMap
 from model import setup_traffic_DBN
 from model import setup_backbone_DBN

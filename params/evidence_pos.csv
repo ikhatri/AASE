@@ -1,5 +1,5 @@
-states,before,straight,left,right
-before,1,0,0,0
+states,at,straight,left,right
+at,1,0,0,0
 straight,0,1,0,0
 left,0,0,1,0
 right,0,0,0,1
