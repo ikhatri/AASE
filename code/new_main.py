@@ -12,6 +12,7 @@ from new_model import *
 import math
 import re
 import pomegranate as pom
+import plot_styling as ps
 
 SAMPLE_DIR = Path('sample-data/')
 GLARE_DIR = Path('glare_example/')
@@ -28,11 +29,27 @@ def plot_probs(probs: dict, interval: int):
   timestep = 1/(10/interval) # we take every ith entry from 10/second
   x_axis = [x*timestep for x in range(len(plottable['red']))]
   plt.figure()
-  plt.plot(x_axis, plottable['red'], 'r-')
-  plt.plot(x_axis, plottable['green'], 'g-')
-  plt.plot(x_axis, plottable['yellow'], 'y-')
-  plt.xlabel('time in seconds')
-  plt.ylabel('probability of light state')
+  ps.setupfig()
+  ax = plt.gca()
+  ps.grid()
+  ax.set_xlim([0, 29])
+  ax.set_ylim([0, 1])
+  r = ax.fill_between(x_axis, plottable['red'])
+  r.set_facecolors([[.74,.33,.33,.3]])
+  r.set_edgecolors([[.74,.33,.33,.75]])
+  r.set_linewidths([2])
+
+  g = ax.fill_between(x_axis, plottable['green'])
+  g.set_facecolors([[.48,.69,.41,.3]])
+  g.set_edgecolors([[.48,.69,.41,.75]])
+  g.set_linewidths([2])
+
+  y = ax.fill_between(x_axis, plottable['yellow'])
+  y.set_facecolors([[.86,.6,.16,.3]])
+  y.set_edgecolors([[.86,.6,.16,.75]])
+  y.set_linewidths([2])
+  # plt.xlabel('time in seconds')
+  # plt.ylabel('probability of light state')
 
 def plot_runtime(times: list):
   plt.figure()
@@ -44,18 +61,18 @@ def plot_runtime(times: list):
 if __name__ == "__main__":
   print('Using GPU?', pom.utils.is_gpu_enabled())
   interval = 10 # out of 10 hz, so it's every 5th image of the 10/second that we have
-  adj_obj_ids = [0, 1, 2]
-  cross_obj_ids = []
-  log_id = '64c12551-adb9-36e3-a0c1-e43a0e9f3845'
+  adj_obj_ids = [9, 11]
+  cross_obj_ids = [5, 6, 7, 8, 10, 15, 19, 23]
+  log_id = 'b1ca08f1-24b0-3c39-ba4e-d5a92868462c'
   argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath('train1')).get(log_id)
-  end_time = 150
+  end_time = 299
   print(argo_data)
   city_map = ArgoverseMap()
-  # visualize(city_map, argo_data, end_time, obj_ids=list(range(18, 24)))
+  # visualize(city_map, argo_data, end_time, obj_ids=[3, 4])
 
   evidence_dict = get_evidence(city_map, argo_data, end_time)
   total_discr_evidence_dict = {}
-  pom_evidence_dicts = [{} for t in range(0, (end_time//interval)+1)]
+  pom_evidence_dicts = [{} for t in range(0, (end_time//interval)+2)]
   for i in range(len(evidence_dict)):
     if i in adj_obj_ids or i in cross_obj_ids:
       discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
@@ -64,11 +81,11 @@ if __name__ == "__main__":
         pom_evidence_dicts[timestep][key] = value
   pom_evidence_dicts.pop(0)
 
-  # ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath('train1/'+log_id+'/rfc.txt'))
-  # yolo_evidence = yolo_to_evidence(yolo, ft, interval)
-  # for t, e in enumerate(pom_evidence_dicts):
-  #   if t in yolo_evidence:
-  #     e.update(yolo_evidence[t])
+  ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath('train1/'+log_id+'/rfc.txt'))
+  yolo_evidence = yolo_to_evidence(yolo, ft, interval)
+  for t, e in enumerate(pom_evidence_dicts):
+    if t in yolo_evidence:
+      e.update(yolo_evidence[t])
 
   filepath = Path('params')
   dbn, names = init_DBN(filepath, adj_obj_ids, cross_obj_ids)
@@ -86,5 +103,6 @@ if __name__ == "__main__":
     timing.append(execution_time)
 
   plot_probs(pom_out, interval)
-  plot_runtime(timing)
+  # plot_runtime(timing)
+  plt.tight_layout()
   plt.show()

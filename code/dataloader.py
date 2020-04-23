@@ -106,6 +106,7 @@ def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseT
             # ensure that the object is in front of the vehicle
             # comparing the vehicle's position at time i with the object's position at time i
             # where time i is a time step between 0 and end
+            # flip this magic switch for miami?
             if x > av_position_x:
                 continue
 

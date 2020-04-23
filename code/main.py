@@ -33,8 +33,8 @@ if __name__ == "__main__":
   end_time = 150
   interval = 10
   adj_obj_ids = [0]
-  cross_obj_ids = []
-  argo_data = load_all_logs(GLARE_DIR)
+  cross_obj_ids = [9]
+  argo_data = load_all_logs(SAMPLE_DIR)
   city_map = ArgoverseMap()
   # visualize(city_map, argo_data, end_time)
   evidence_dict = get_evidence(city_map, argo_data, end_time)

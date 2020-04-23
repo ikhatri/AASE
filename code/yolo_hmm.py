@@ -11,6 +11,8 @@ from pathlib import Path
 import re
 import argparse
 
+import plot_styling as ps
+
 def load_cpt(filepath: Path, epsilon: float=0):
     labeled_dataframe = pd.read_csv(filepath)
     labeled_dataframe.set_index('states', inplace=True)
@@ -70,10 +72,28 @@ if __name__ == "__main__":
   preds = np.array(preds)
 
   plt.figure()
-  plt.plot([x/30 for x in range(1, len(preds)+1)], preds[:,0], 'r-')
-  plt.plot([x/30 for x in range(1, len(preds)+1)], preds[:,1], 'g-')
-  plt.plot([x/30 for x in range(1, len(preds)+1)], preds[:,2], 'y-')
-  plt.title('HMM normalized YOLO predictions')
-  plt.ylabel('probability of light state')
-  plt.xlabel('time in seconds')
+  ps.setupfig()
+  ax = plt.gca()
+  ps.grid()
+  end_time = 29
+  ax.set_xlim([0, end_time])
+  ax.set_ylim([0, 1])
+  r = ax.fill_between([x/30 for x in range(1, len(preds[:end_time*30])+1)], preds[:end_time*30,0])
+  r.set_facecolors([[.74,.33,.33,.3]])
+  r.set_edgecolors([[.74,.33,.33,.75]])
+  r.set_linewidths([2])
+
+  g = ax.fill_between([x/30 for x in range(1, len(preds[:end_time*30])+1)], preds[:end_time*30,1])
+  g.set_facecolors([[.48,.69,.41,.3]])
+  g.set_edgecolors([[.48,.69,.41,.75]])
+  g.set_linewidths([2])
+
+  y = ax.fill_between([x/30 for x in range(1, len(preds[:end_time*30])+1)], preds[:end_time*30,2])
+  y.set_facecolors([[.86,.6,.16,.3]])
+  y.set_edgecolors([[.86,.6,.16,.75]])
+  y.set_linewidths([2])
+  # plt.title('HMM normalized YOLO predictions')
+  # plt.ylabel('probability of light state')
+  # plt.xlabel('time in seconds')
+  plt.tight_layout()
   plt.show()
