@@ -9,3 +9,4 @@ To address this goal, we plan to design an introspective algorithm which can err
 2. Fix index out of bounds errors in main.py line 81 when end_time is set to specific numbers
     - For example in log train1/b1ca... setting end_time to 275 causes out of bounds error but 290 is perfectly fine
 3. Code cleanup and documentation
+4. In the visualize function instead of relying on the colors to tell cars apart, just print the ID as text in the 3D env
