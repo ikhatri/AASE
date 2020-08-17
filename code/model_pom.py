@@ -46,38 +46,18 @@ def setup_test_DBN():
     filepath = Path("params")
 
     # Load CPTs
-    light_base_cpt = load_cpt_weights(
-        filepath.joinpath("single_light_model.csv"), epsilon=0.02
-    )
-    velocity_base_cpt = load_cpt_weights(
-        filepath.joinpath("velocity_model.csv"), epsilon=0.03
-    )
-    position_base_cpt = load_cpt_weights(
-        filepath.joinpath("position_model.csv"), epsilon=0.01
-    )
-    driver_base_cpt = load_cpt_weights(
-        filepath.joinpath("driver_model.csv"), epsilon=0.01
-    )
-    light_prior = pom.DiscreteDistribution(
-        {"red": 1.0 / 3, "green": 1.0 / 3, "yellow": 1.0 / 3}
-    )
-    position_prior = pom.DiscreteDistribution(
-        {"at": 1.0 / 4, "left": 1.0 / 4, "straight": 1.0 / 4, "right": 1.0 / 4}
-    )
-    velocity_prior = pom.DiscreteDistribution(
-        {"zero": 1.0 / 3, "low": 1.0 / 3, "med": 1.0 / 3}
-    )
+    light_base_cpt = load_cpt_weights(filepath.joinpath("single_light_model.csv"), epsilon=0.02)
+    velocity_base_cpt = load_cpt_weights(filepath.joinpath("velocity_model.csv"), epsilon=0.03)
+    position_base_cpt = load_cpt_weights(filepath.joinpath("position_model.csv"), epsilon=0.01)
+    driver_base_cpt = load_cpt_weights(filepath.joinpath("driver_model.csv"), epsilon=0.01)
+    light_prior = pom.DiscreteDistribution({"red": 1.0 / 3, "green": 1.0 / 3, "yellow": 1.0 / 3})
+    position_prior = pom.DiscreteDistribution({"at": 1.0 / 4, "left": 1.0 / 4, "straight": 1.0 / 4, "right": 1.0 / 4})
+    velocity_prior = pom.DiscreteDistribution({"zero": 1.0 / 3, "low": 1.0 / 3, "med": 1.0 / 3})
 
-    driver_cpt = pom.ConditionalProbabilityTable(
-        driver_base_cpt, [light_prior, position_prior, velocity_prior]
-    )
+    driver_cpt = pom.ConditionalProbabilityTable(driver_base_cpt, [light_prior, position_prior, velocity_prior])
     light_cpt = pom.ConditionalProbabilityTable(light_base_cpt, [light_prior])
-    velocity_cpt = pom.ConditionalProbabilityTable(
-        velocity_base_cpt, [velocity_prior, driver_cpt]
-    )
-    position_cpt = pom.ConditionalProbabilityTable(
-        position_base_cpt, [driver_cpt, position_prior, velocity_cpt]
-    )
+    velocity_cpt = pom.ConditionalProbabilityTable(velocity_base_cpt, [velocity_prior, driver_cpt])
+    position_cpt = pom.ConditionalProbabilityTable(position_base_cpt, [driver_cpt, position_prior, velocity_cpt])
 
     # Time slice 0
     light_node0 = pom.Node(light_prior, name="light_node0")
@@ -93,13 +73,7 @@ def setup_test_DBN():
     # Add edges
     model = pom.BayesianNetwork("Single Slice Light")
     model.add_states(
-        light_node0,
-        position_node0,
-        velocity_node0,
-        driver_node0,
-        light_node1,
-        position_node1,
-        velocity_node1,
+        light_node0, position_node0, velocity_node0, driver_node0, light_node1, position_node1, velocity_node1,
     )
     model = add_edges(
         model,
@@ -122,24 +96,14 @@ def setup_test_DBN():
     print("Program Executed in " + str(execution_time))  # It returns time in seconds
 
 
-def build_backbone_DBN_slice(
-    filepath: Path, system_belief: pom.DiscreteDistribution, iter: int = 0
-):
+def build_backbone_DBN_slice(filepath: Path, system_belief: pom.DiscreteDistribution, iter: int = 0):
     """
     TODO: Documentation
     """
-    system_weights = load_cpt_weights(
-        filepath.joinpath("system_model.csv"), epsilon=0.01
-    )
-    our_weights = load_cpt_weights(
-        filepath.joinpath("our_light_model.csv"), epsilon=0.005
-    )
-    cross_weights = load_cpt_weights(
-        filepath.joinpath("cross_light_model.csv"), epsilon=0.005
-    )
-    vision_weights = load_cpt_weights(
-        filepath.joinpath("vision_evidence.csv"), epsilon=0.08
-    )
+    system_weights = load_cpt_weights(filepath.joinpath("system_model.csv"), epsilon=0.01)
+    our_weights = load_cpt_weights(filepath.joinpath("our_light_model.csv"), epsilon=0.005)
+    cross_weights = load_cpt_weights(filepath.joinpath("cross_light_model.csv"), epsilon=0.005)
+    vision_weights = load_cpt_weights(filepath.joinpath("vision_evidence.csv"), epsilon=0.08)
 
     system_cpt = pom.ConditionalProbabilityTable(system_weights, [system_belief])
     our_light_cpt = pom.ConditionalProbabilityTable(our_weights, [system_cpt])
@@ -164,9 +128,7 @@ def build_backbone_DBN_slice(
 
     model = pom.BayesianNetwork("Intersection")
 
-    model.add_nodes(
-        prev_system, next_system, next_our_light, next_cross_light, next_vision
-    )
+    model.add_nodes(prev_system, next_system, next_our_light, next_cross_light, next_vision)
     model = add_edges(
         model,
         [
@@ -206,37 +168,17 @@ def setup_car_DBN_slice(
         position_belief: the initial (or previous) distribution of the position
         velocity_belief: the initial or previous distribution of the velocity
     """
-    velocity_weights = load_cpt_weights(
-        filepath.joinpath("velocity_model.csv"), epsilon=0.03
-    )
-    position_weights = load_cpt_weights(
-        filepath.joinpath("position_model.csv"), epsilon=0.01
-    )
-    driver_weights = load_cpt_weights(
-        filepath.joinpath("driver_model.csv"), epsilon=0.01
-    )
-    evidence_pos_weights = load_cpt_weights(
-        filepath.joinpath("evidence_pos.csv"), epsilon=0.05
-    )
-    evidence_vel_weights = load_cpt_weights(
-        filepath.joinpath("evidence_vel.csv"), epsilon=0.05
-    )
+    velocity_weights = load_cpt_weights(filepath.joinpath("velocity_model.csv"), epsilon=0.03)
+    position_weights = load_cpt_weights(filepath.joinpath("position_model.csv"), epsilon=0.01)
+    driver_weights = load_cpt_weights(filepath.joinpath("driver_model.csv"), epsilon=0.01)
+    evidence_pos_weights = load_cpt_weights(filepath.joinpath("evidence_pos.csv"), epsilon=0.05)
+    evidence_vel_weights = load_cpt_weights(filepath.joinpath("evidence_vel.csv"), epsilon=0.05)
 
-    driver_cpt = pom.ConditionalProbabilityTable(
-        driver_weights, [light_belief, position_belief, velocity_belief]
-    )
-    velocity_cpt = pom.ConditionalProbabilityTable(
-        velocity_weights, [velocity_belief, driver_cpt]
-    )
-    position_cpt = pom.ConditionalProbabilityTable(
-        position_weights, [driver_cpt, position_belief, velocity_cpt]
-    )
-    evidence_pos_cpt = pom.ConditionalProbabilityTable(
-        evidence_pos_weights, [position_cpt]
-    )
-    evidence_vel_cpt = pom.ConditionalProbabilityTable(
-        evidence_vel_weights, [velocity_cpt]
-    )
+    driver_cpt = pom.ConditionalProbabilityTable(driver_weights, [light_belief, position_belief, velocity_belief])
+    velocity_cpt = pom.ConditionalProbabilityTable(velocity_weights, [velocity_belief, driver_cpt])
+    position_cpt = pom.ConditionalProbabilityTable(position_weights, [driver_cpt, position_belief, velocity_cpt])
+    evidence_pos_cpt = pom.ConditionalProbabilityTable(evidence_pos_weights, [position_cpt])
+    evidence_vel_cpt = pom.ConditionalProbabilityTable(evidence_vel_weights, [velocity_cpt])
 
     names = []
     s_car_id = str(car_id)
@@ -302,13 +244,7 @@ def add_cars_DBN(
 ):
     for adj_id in adj_car_ids:
         node_names, nodes, edges = setup_car_DBN_slice(
-            filepath,
-            our_light,
-            our_light_belief,
-            car_beliefs[adj_id]["pos"],
-            car_beliefs[adj_id]["vel"],
-            adj_id,
-            iter,
+            filepath, our_light, our_light_belief, car_beliefs[adj_id]["pos"], car_beliefs[adj_id]["vel"], adj_id, iter,
         )
         names.extend(node_names)
         backbone_dbn.add_nodes(*nodes)
@@ -349,18 +285,11 @@ def init_DBN(filepath: Path, adj_car_ids: list, cross_car_ids: list):
         car_beliefs[car_id]["pos"] = pom.DiscreteDistribution(
             {"at": 1.0 / 4, "left": 1.0 / 4, "straight": 1.0 / 4, "right": 1.0 / 4}
         )
-        car_beliefs[car_id]["vel"] = pom.DiscreteDistribution(
-            {"zero": 1.0 / 3, "low": 1.0 / 3, "med": 1.0 / 3}
-        )
+        car_beliefs[car_id]["vel"] = pom.DiscreteDistribution({"zero": 1.0 / 3, "low": 1.0 / 3, "med": 1.0 / 3})
 
-    (
-        dbn,
-        our_light,
-        cross_light,
-        our_light_belief,
-        cross_light_belief,
-        names,
-    ) = build_backbone_DBN_slice(filepath, system_prior)
+    (dbn, our_light, cross_light, our_light_belief, cross_light_belief, names,) = build_backbone_DBN_slice(
+        filepath, system_prior
+    )
 
     dbn, names = add_cars_DBN(
         filepath,
@@ -379,11 +308,7 @@ def init_DBN(filepath: Path, adj_car_ids: list, cross_car_ids: list):
 
 
 def iterate_DBN(
-    filepath: Path,
-    adj_car_ids: list,
-    cross_car_ids: list,
-    prev_beliefs: dict,
-    iter: int,
+    filepath: Path, adj_car_ids: list, cross_car_ids: list, prev_beliefs: dict, iter: int,
 ):
     s_iter = str(iter)
     if "system_" + s_iter in prev_beliefs:
@@ -404,30 +329,19 @@ def iterate_DBN(
         s_car_id = str(car_id)
         car_beliefs[car_id] = {}
         if s_car_id + "_position_" + s_iter in prev_beliefs:
-            car_beliefs[car_id]["pos"] = pom.DiscreteDistribution(
-                prev_beliefs[s_car_id + "_position_" + s_iter]
-            )
+            car_beliefs[car_id]["pos"] = pom.DiscreteDistribution(prev_beliefs[s_car_id + "_position_" + s_iter])
         else:
             car_beliefs[car_id]["pos"] = pom.DiscreteDistribution(
                 {"at": 1.0 / 4, "left": 1.0 / 4, "straight": 1.0 / 4, "right": 1.0 / 4}
             )
         if s_car_id + "_velocity_" + s_iter in prev_beliefs:
-            car_beliefs[car_id]["vel"] = pom.DiscreteDistribution(
-                prev_beliefs[s_car_id + "_velocity_" + s_iter]
-            )
+            car_beliefs[car_id]["vel"] = pom.DiscreteDistribution(prev_beliefs[s_car_id + "_velocity_" + s_iter])
         else:
-            car_beliefs[car_id]["vel"] = pom.DiscreteDistribution(
-                {"zero": 1.0 / 3, "low": 1.0 / 3, "med": 1.0 / 3}
-            )
+            car_beliefs[car_id]["vel"] = pom.DiscreteDistribution({"zero": 1.0 / 3, "low": 1.0 / 3, "med": 1.0 / 3})
 
-    (
-        dbn,
-        our_light,
-        cross_light,
-        our_light_belief,
-        cross_light_belief,
-        names,
-    ) = build_backbone_DBN_slice(filepath, system_prior, iter)
+    (dbn, our_light, cross_light, our_light_belief, cross_light_belief, names,) = build_backbone_DBN_slice(
+        filepath, system_prior, iter
+    )
     dbn, names = add_cars_DBN(
         filepath,
         dbn,

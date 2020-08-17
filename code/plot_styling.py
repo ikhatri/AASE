@@ -53,12 +53,7 @@ def setupfig(current_fig=None, halfsize=False, thirdsize=False, quartersize=Fals
 def grid(plt=plt):
     plt.grid(linewidth=linewidth / 2)
     plt.grid(
-        which="minor",
-        color=minor_tick_color,
-        linestyle="--",
-        alpha=0.7,
-        clip_on=True,
-        linewidth=linewidth / 4,
+        which="minor", color=minor_tick_color, linestyle="--", alpha=0.7, clip_on=True, linewidth=linewidth / 4,
     )
 
 

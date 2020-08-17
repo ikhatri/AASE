@@ -50,18 +50,14 @@ if __name__ == "__main__":
     # visualize(city_map, argo_data, end_time)
     evidence_dict = get_evidence(city_map, argo_data, end_time)
     backbone_dbn, our_light, cross_light = setup_backbone_DBN(PARAMS_DIR)
-    dbn = add_cars_DBN(
-        PARAMS_DIR, backbone_dbn, our_light, cross_light, adj_obj_ids, cross_obj_ids
-    )
+    dbn = add_cars_DBN(PARAMS_DIR, backbone_dbn, our_light, cross_light, adj_obj_ids, cross_obj_ids)
     # dbn = setup_traffic_DBN(Path('params'))
     obj_ids = adj_obj_ids + cross_obj_ids
     model = get_inference_model(dbn)
     earliest_evidence = math.inf
     latest_evidence = 0
     for obj_id in obj_ids:
-        start, stop = get_evidence_start_and_finish_for_object(
-            evidence_dict, interval, obj_id
-        )
+        start, stop = get_evidence_start_and_finish_for_object(evidence_dict, interval, obj_id)
         if start < earliest_evidence:
             earliest_evidence = start
         if stop > latest_evidence:
@@ -71,16 +67,10 @@ if __name__ == "__main__":
         evidence_up_to_present = {}
         for obj_id in obj_ids:
             evidence_up_to_present = get_discretized_evidence_for_object(
-                evidence_dict,
-                interval,
-                obj_id,
-                up_to=i,
-                init_evidence_dict=evidence_up_to_present,
+                evidence_dict, interval, obj_id, up_to=i, init_evidence_dict=evidence_up_to_present,
             )
 
-        results = model.query(
-            variables=[("Our Light", i)], evidence=evidence_up_to_present
-        )
+        results = model.query(variables=[("Our Light", i)], evidence=evidence_up_to_present)
         for d in results:
             # print(d, results[d])
             plottable_data["r"].append(results[d].values[0])

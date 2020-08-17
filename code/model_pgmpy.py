@@ -45,15 +45,11 @@ def setup_test_DBN():
         evidence=[("I", 0), ("D", 0)],
         evidence_card=[2, 2],
     )
-    d_i_cpd = cpd(
-        ("D", 1), 2, [[0.6, 0.3], [0.4, 0.7]], evidence=[("D", 0)], evidence_card=[2]
-    )
+    d_i_cpd = cpd(("D", 1), 2, [[0.6, 0.3], [0.4, 0.7]], evidence=[("D", 0)], evidence_card=[2])
     diff_cpd = cpd(("D", 0), 2, [[0.6, 0.4]])
     intel_cpd = cpd(("I", 0), 2, [[0.7, 0.3]])
 
-    i_i_cpd = cpd(
-        ("I", 1), 2, [[0.5, 0.4], [0.5, 0.6]], evidence=[("I", 0)], evidence_card=[2]
-    )
+    i_i_cpd = cpd(("I", 1), 2, [[0.5, 0.4], [0.5, 0.6]], evidence=[("I", 0)], evidence_card=[2])
     dbn.add_cpds(grade_cpd, d_i_cpd, diff_cpd, intel_cpd, i_i_cpd)
     # print(dbn.get_inter_edges())
     # print(dbn.get_interface_nodes(time_slice=0))
@@ -87,13 +83,7 @@ def setup_traffic_DBN(filepath: Path):
         ]
     )
     # with 3 possible lights (red, green, yellow), and 3 possible lights to transition, we have 9 params
-    light_CPD = cpd(
-        ("Traffic Light", 1),
-        3,
-        light_model,
-        evidence=[("Traffic Light", 0)],
-        evidence_card=[3],
-    )
+    light_CPD = cpd(("Traffic Light", 1), 3, light_model, evidence=[("Traffic Light", 0)], evidence_card=[3],)
     light_CPD.normalize()
     light_prior = cpd(("Traffic Light", 0), 3, [[0.33, 0.33, 0.33]])
     light_prior.normalize()
@@ -110,11 +100,7 @@ def setup_traffic_DBN(filepath: Path):
     # With three possible velocities (zero, low, med), we have 3*3*9 = 54 params.
     # However, this is deterministic, so we only have 3*9 27 nonzero
     velocity_CPD = cpd(
-        ("Velocity", 1),
-        3,
-        velocity_model,
-        evidence=[("Velocity", 0), ("Driver", 0)],
-        evidence_card=[3, 9],
+        ("Velocity", 1), 3, velocity_model, evidence=[("Velocity", 0), ("Driver", 0)], evidence_card=[3, 9],
     )
     velocity_CPD.normalize()
     velocity_prior = cpd(("Velocity", 0), 3, [[0.33, 0.33, 0.33]])
@@ -133,25 +119,14 @@ def setup_traffic_DBN(filepath: Path):
     position_prior = cpd(
         ("Position", 0),
         4,
-        [
-            [0.25, 0.25, 0.25],
-            [0.25, 0.25, 0.25],
-            [0.25, 0.25, 0.25],
-            [0.25, 0.25, 0.25],
-        ],
+        [[0.25, 0.25, 0.25], [0.25, 0.25, 0.25], [0.25, 0.25, 0.25], [0.25, 0.25, 0.25],],
         evidence=[("Velocity", 0)],
         evidence_card=[3],
     )
     # position_prior = cpd(('Position', 0), 4, [[.25, .25, .25, .25]])
 
     dbn.add_cpds(
-        light_prior,
-        light_CPD,
-        driver_CPD,
-        velocity_prior,
-        velocity_CPD,
-        position_prior,
-        position_CPD,
+        light_prior, light_CPD, driver_CPD, velocity_prior, velocity_CPD, position_prior, position_CPD,
     )
     return dbn
 
@@ -160,12 +135,8 @@ def setup_car_cpds(filepath: Path, car_id, light):
     driver_model = setup_model(filepath.joinpath("driver_model.csv"), epsilon=0.01)
     velocity_model = setup_model(filepath.joinpath("velocity_model.csv"), epsilon=0.03)
     position_model = setup_model(filepath.joinpath("position_model.csv"), epsilon=0.01)
-    pos_evidence_model = setup_model(
-        filepath.joinpath("evidence_pos.csv"), epsilon=0.05
-    )
-    vel_evidence_model = setup_model(
-        filepath.joinpath("evidence_vel.csv"), epsilon=0.05
-    )
+    pos_evidence_model = setup_model(filepath.joinpath("evidence_pos.csv"), epsilon=0.05)
+    vel_evidence_model = setup_model(filepath.joinpath("evidence_vel.csv"), epsilon=0.05)
     s_car_id = str(car_id)
     driver = "Driver_" + s_car_id
     velocity = "Velocity_" + s_car_id
@@ -189,22 +160,12 @@ def setup_car_cpds(filepath: Path, car_id, light):
     # with 9 possible driver actions (left,straight,right * +,-,0 accel), we have 9*3*4*3 params (although many will be 0).
     # we know the driver isn't deterministic, because he may be turning right/left or going straight
     driver_CPD = cpd(
-        (driver, 0),
-        9,
-        driver_model,
-        evidence=[(light, 0), (position, 0), (velocity, 0)],
-        evidence_card=[3, 4, 3],
+        (driver, 0), 9, driver_model, evidence=[(light, 0), (position, 0), (velocity, 0)], evidence_card=[3, 4, 3],
     )
     driver_CPD.normalize()
     # With three possible velocities (zero, low, med), we have 3*3*9 = 54 params.
     # However, this is deterministic, so we only have 3*9 27 nonzero
-    velocity_CPD = cpd(
-        (velocity, 1),
-        3,
-        velocity_model,
-        evidence=[(velocity, 0), (driver, 0)],
-        evidence_card=[3, 9],
-    )
+    velocity_CPD = cpd((velocity, 1), 3, velocity_model, evidence=[(velocity, 0), (driver, 0)], evidence_card=[3, 9],)
     velocity_CPD.normalize()
     velocity_prior = cpd((velocity, 0), 3, [[0.33, 0.33, 0.33]])
     velocity_prior.normalize()
@@ -212,42 +173,21 @@ def setup_car_cpds(filepath: Path, car_id, light):
     # However, this also is deterministic, so we only have 9*4*3 = 72 params.
     # print(position_model.shape)
     position_CPD = cpd(
-        (position, 1),
-        4,
-        position_model,
-        evidence=[(driver, 0), (position, 0), (velocity, 1)],
-        evidence_card=[9, 4, 3],
+        (position, 1), 4, position_model, evidence=[(driver, 0), (position, 0), (velocity, 1)], evidence_card=[9, 4, 3],
     )
     position_CPD.normalize()
     position_prior = cpd(
         (position, 0),
         4,
-        [
-            [0.25, 0.25, 0.25],
-            [0.25, 0.25, 0.25],
-            [0.25, 0.25, 0.25],
-            [0.25, 0.25, 0.25],
-        ],
+        [[0.25, 0.25, 0.25], [0.25, 0.25, 0.25], [0.25, 0.25, 0.25], [0.25, 0.25, 0.25],],
         evidence=[(velocity, 0)],
         evidence_card=[3],
     )
     # Here we have some simple CPDs relating our actual observations to the latent variables position and velocity
     # The epsilon setting for their models up above set the probabilty of a mistaken observation
-    pos_evidence_CPD = cpd(
-        (pos_evidence, 0),
-        4,
-        pos_evidence_model,
-        evidence=[(position, 0)],
-        evidence_card=[4],
-    )
+    pos_evidence_CPD = cpd((pos_evidence, 0), 4, pos_evidence_model, evidence=[(position, 0)], evidence_card=[4],)
     pos_evidence_CPD.normalize()
-    vel_evidence_CPD = cpd(
-        (vel_evidence, 0),
-        3,
-        vel_evidence_model,
-        evidence=[(velocity, 0)],
-        evidence_card=[3],
-    )
+    vel_evidence_CPD = cpd((vel_evidence, 0), 3, vel_evidence_model, evidence=[(velocity, 0)], evidence_card=[3],)
     vel_evidence_CPD.normalize()
     cpds = [
         driver_CPD,
@@ -281,37 +221,19 @@ def setup_backbone_DBN(filepath: Path):
     )
     system_prior = cpd(("Light System", 0), 6, [[0.16, 0.16, 0.16, 0.16, 0.16, 0.16]])
     system_prior.normalize()
-    system_CPD = cpd(
-        ("Light System", 1),
-        6,
-        system_model,
-        evidence=[("Light System", 0)],
-        evidence_card=[6],
-    )
+    system_CPD = cpd(("Light System", 1), 6, system_model, evidence=[("Light System", 0)], evidence_card=[6],)
     system_CPD.normalize()
-    our_light_CPD = cpd(
-        (our_light, 0), 3, our_model, evidence=[("Light System", 0)], evidence_card=[6]
-    )
+    our_light_CPD = cpd((our_light, 0), 3, our_model, evidence=[("Light System", 0)], evidence_card=[6])
     our_light_CPD.normalize()
-    cross_light_CPD = cpd(
-        (cross_light, 0),
-        3,
-        cross_model,
-        evidence=[("Light System", 0)],
-        evidence_card=[6],
-    )
+    cross_light_CPD = cpd((cross_light, 0), 3, cross_model, evidence=[("Light System", 0)], evidence_card=[6],)
     cross_light_CPD.normalize()
-    vision_CPD = cpd(
-        ("Vision", 0), 3, vision_model, evidence=[(our_light, 0)], evidence_card=[3]
-    )
+    vision_CPD = cpd(("Vision", 0), 3, vision_model, evidence=[(our_light, 0)], evidence_card=[3])
     vision_CPD.normalize()
     dbn.add_cpds(system_prior, system_CPD, our_light_CPD, cross_light_CPD, vision_CPD)
     return dbn, our_light, cross_light
 
 
-def add_cars_DBN(
-    filepath: Path, backbone_dbn, our_light, cross_light, adj_car_ids, cross_car_ids
-):
+def add_cars_DBN(filepath: Path, backbone_dbn, our_light, cross_light, adj_car_ids, cross_car_ids):
 
     for adj_id in adj_car_ids:
         nodes, edges, cpds = setup_car_cpds(filepath, adj_id, our_light)

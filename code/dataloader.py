@@ -51,17 +51,11 @@ def draw_3d_bbox(bbox: np.ndarray, color: tuple = (1, 0, 0)) -> None:
     ]
     for connection in connections:
         mlab.plot3d(
-            bbox[connection, :1],
-            bbox[connection, 1:2],
-            bbox[connection, 2:3],
-            color=color,
-            tube_radius=None,
+            bbox[connection, :1], bbox[connection, 1:2], bbox[connection, 2:3], color=color, tube_radius=None,
         )
 
 
-def get_relevant_trajectories(
-    city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end: int
-) -> dict:
+def get_relevant_trajectories(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end: int) -> dict:
     """For the timestep provided, we grab the set of cars currently in/around an intersection only in front of the AV
 
     Args:
@@ -114,34 +108,28 @@ def get_relevant_trajectories(
                 continue
 
             # get the x, y and z coords of the object with respect to the vehicle at timestep i
-            x, y, z = pose.transform_point_cloud(np.array([np.array(obj.translation)]))[
-                0
-            ]
+            x, y, z = pose.transform_point_cloud(np.array([np.array(obj.translation)]))[0]
 
             # ensure that the object is in front of the vehicle
             # comparing the vehicle's position at time i with the object's position at time i
             # where time i is a time step between 0 and end
-            # TODO: flip this magic switch for miami?
-            if x > av_position_x:
+            # note that coords are flipped for different cities
+            if x < av_position_x and argoverse_data.city_name == "MIA":
+                continue
+            if x > av_position_x and argoverse_data.city_name == "PIT":
                 continue
 
             # check if x,y is in a segment not controlled by traffic control
-            intersecting_lane_ids = city_map.get_lane_segments_containing_xy(
-                x, y, argoverse_data.city_name
-            )
+            intersecting_lane_ids = city_map.get_lane_segments_containing_xy(x, y, argoverse_data.city_name)
             traffic_control = False
             if intersecting_lane_ids:
                 for lane_id in intersecting_lane_ids:
-                    successor_lane_ids = city_map.get_lane_segment_successor_ids(
-                        lane_id, argoverse_data.city_name
-                    )
+                    successor_lane_ids = city_map.get_lane_segment_successor_ids(lane_id, argoverse_data.city_name)
                     if successor_lane_ids:
                         for succ_lane in successor_lane_ids:
                             if city_map.lane_has_traffic_control_measure(
                                 lane_id, argoverse_data.city_name
-                            ) or city_map.lane_has_traffic_control_measure(
-                                succ_lane, argoverse_data.city_name
-                            ):
+                            ) or city_map.lane_has_traffic_control_measure(succ_lane, argoverse_data.city_name):
                                 traffic_control = True
 
             if not traffic_control:
@@ -152,8 +140,7 @@ def get_relevant_trajectories(
             data_dict[obj.track_id][i]["candidate_segments"] = intersecting_lane_ids[:]
             traj_by_id[obj.track_id].append(np.array([x, y]))
             candidate_centerlines = [
-                city_map.get_lane_segment_centerline(s, argoverse_data.city_name)
-                for s in intersecting_lane_ids
+                city_map.get_lane_segment_centerline(s, argoverse_data.city_name) for s in intersecting_lane_ids
             ]
             best_fit_centerline = get_oracle_from_candidate_centerlines(
                 candidate_centerlines, np.array(traj_by_id[obj.track_id])
@@ -167,9 +154,7 @@ def get_relevant_trajectories(
 
             # If the car leaves the segment it was following and drifts into an adjacent lane
             # the above algorithm will break, in this case we simply default to the prevous correct segment
-            lane_dir_vector = city_map.get_lane_direction(
-                np.array([x, y]), argoverse_data.city_name
-            )
+            lane_dir_vector = city_map.get_lane_direction(np.array([x, y]), argoverse_data.city_name)
             lane_dir_vector = np.array([lane_dir_vector[0][0], lane_dir_vector[0][1]])
 
             # The check is done by computing the angle between
@@ -181,26 +166,16 @@ def get_relevant_trajectories(
                     while p not in data_dict[obj.track_id] and p >= 0:
                         p -= 1
                     if p > 0:
-                        data_dict[obj.track_id][i]["lane_id"] = data_dict[obj.track_id][
-                            p
-                        ]["lane_id"]
+                        data_dict[obj.track_id][i]["lane_id"] = data_dict[obj.track_id][p]["lane_id"]
                     else:
-                        data_dict[obj.track_id][i]["lane_id"] = intersecting_lane_ids[
-                            oracle_segment
-                        ]
+                        data_dict[obj.track_id][i]["lane_id"] = intersecting_lane_ids[oracle_segment]
                 else:
-                    data_dict[obj.track_id][i]["lane_id"] = intersecting_lane_ids[
-                        oracle_segment
-                    ]
+                    data_dict[obj.track_id][i]["lane_id"] = intersecting_lane_ids[oracle_segment]
             else:
-                data_dict[obj.track_id][i]["lane_id"] = intersecting_lane_ids[
-                    oracle_segment
-                ]
+                data_dict[obj.track_id][i]["lane_id"] = intersecting_lane_ids[oracle_segment]
 
             # re-transform the object coords of the object to be with respect to the vehicle at the final timestep which we are plotting
-            x, y, _ = current_pose.inverse_transform_point_cloud(
-                np.array([np.array([x, y, z])])
-            )[0]
+            x, y, _ = current_pose.inverse_transform_point_cloud(np.array([np.array([x, y, z])]))[0]
 
             data_dict[obj.track_id][i]["position"] = np.array([x, y, 0])
 
@@ -249,9 +224,7 @@ def visualize(
                 continue
             if obj.track_id not in data:
                 color = (0, 0, 0)
-                bbox = rotate_polygon_about_pt(
-                    obj.as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3)
-                )
+                bbox = rotate_polygon_about_pt(obj.as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3))
                 draw_3d_bbox(bbox, color=color)
         for et in range(0, end_time):
             all_objects = argo_data.get_label_object(et)
@@ -277,24 +250,15 @@ def visualize(
                 color = colors[i % 12]
                 print(i, obj, color)
                 bbox = rotate_polygon_about_pt(
-                    shitty_dict[obj].as_3d_bbox(),
-                    city_to_egovehicle_se3.rotation,
-                    np.zeros(3),
+                    shitty_dict[obj].as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3),
                 )
                 draw_3d_bbox(bbox, color=color)
     if plot_trajectories:
         for o in data:
             traj = np.array([data[o][k]["position"] for k in data[o].keys()])
-            traj = rotate_polygon_about_pt(
-                traj, city_to_egovehicle_se3.rotation, np.zeros(3)
-            )
+            traj = rotate_polygon_about_pt(traj, city_to_egovehicle_se3.rotation, np.zeros(3))
             mlab.points3d(
-                traj[:, 0],
-                traj[:, 1],
-                np.zeros((traj.shape[0])),
-                mode="2dcircle",
-                scale_factor=0.5,
-                color=(0, 0, 1),
+                traj[:, 0], traj[:, 1], np.zeros((traj.shape[0])), mode="2dcircle", scale_factor=0.5, color=(0, 0, 1),
             )
     if plot_segments:
         segments = set()
@@ -304,15 +268,9 @@ def visualize(
         for l in segments:
             poly = argo_maps.get_lane_segment_polygon(l, argo_data.city_name)
             poly = city_to_egovehicle_se3.inverse_transform_point_cloud(poly)
-            poly = rotate_polygon_about_pt(
-                poly, city_to_egovehicle_se3.rotation, np.zeros(3)
-            )
+            poly = rotate_polygon_about_pt(poly, city_to_egovehicle_se3.rotation, np.zeros(3))
             mlab.plot3d(
-                poly[:, 0],
-                poly[:, 1],
-                np.zeros(poly.shape[0]),
-                color=(1, 1, 0),
-                tube_radius=None,
+                poly[:, 0], poly[:, 1], np.zeros(poly.shape[0]), color=(1, 1, 0), tube_radius=None,
             )
     if show:
         mlab.show()
@@ -339,22 +297,16 @@ def compute_velocity(data_dict: dict, end_time: int) -> dict:
         for i in range(1, len(observed_steps)):
             t = observed_steps[i]
             p = observed_steps[i - 1]
-            distance = np.linalg.norm(
-                data_dict[obj][t]["position"] - data_dict[obj][p]["position"]
-            )
+            distance = np.linalg.norm(data_dict[obj][t]["position"] - data_dict[obj][p]["position"])
             data_dict[obj][t]["velocity"] = distance / (t - p)
         if len(observed_steps) < 2:
             data_dict[obj][observed_steps[0]]["velocity"] = 0
         else:
-            data_dict[obj][observed_steps[0]]["velocity"] = data_dict[obj][
-                observed_steps[1]
-            ]["velocity"]
+            data_dict[obj][observed_steps[0]]["velocity"] = data_dict[obj][observed_steps[1]]["velocity"]
     return data_dict
 
 
-def discretize(
-    city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, data_dict: dict
-) -> dict:
+def discretize(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, data_dict: dict) -> dict:
     """
     A function to discretize the data into position segments and the following three velocity classes:
         0: zero (0 < v < 0.1)
@@ -393,14 +345,10 @@ def discretize(
                 dv = 2
             data_dict[o][t]["discrete_vel"] = dv
             lane_id = data_dict[o][t]["lane_id"]
-            if not city_map.lane_has_traffic_control_measure(
-                lane_id, argoverse_data.city_name
-            ):
+            if not city_map.lane_has_traffic_control_measure(lane_id, argoverse_data.city_name):
                 data_dict[o][t]["discrete_pos"] = 0
                 continue
-            direction = city_map.get_lane_turn_direction(
-                lane_id, argoverse_data.city_name
-            )
+            direction = city_map.get_lane_turn_direction(lane_id, argoverse_data.city_name)
             if direction == "LEFT":
                 data_dict[o][t]["discrete_pos"] = 1
             if direction == "NONE":
@@ -444,18 +392,12 @@ def build_evidence_pom(obj_ids: list, data_dict: dict, timestep: int) -> dict:
     """
     evidence_dict = {}
     for obj_id in obj_ids:
-        evidence_dict[str(obj_id) + "_evidence_pos_" + str(timestep)] = data_dict[
-            obj_id
-        ][timestep]["discrete_pos"]
-        evidence_dict[str(obj_id) + "_evidence_vel_" + str(timestep)] = data_dict[
-            obj_id
-        ][timestep]["discrete_vel"]
+        evidence_dict[str(obj_id) + "_evidence_pos_" + str(timestep)] = data_dict[obj_id][timestep]["discrete_pos"]
+        evidence_dict[str(obj_id) + "_evidence_vel_" + str(timestep)] = data_dict[obj_id][timestep]["discrete_vel"]
     return evidence_dict
 
 
-def get_evidence(
-    city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end_time: int
-) -> dict:
+def get_evidence(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, end_time: int) -> dict:
     """A function to get all of the evidence for every object from 0-end in the pgmpy format
 
     Args:
@@ -475,9 +417,7 @@ def get_evidence(
     return evidence_dict
 
 
-def get_evidence_start_and_finish_for_object(
-    evidence_dict: dict, interval: int, obj_id: int
-) -> Tuple[int, int]:
+def get_evidence_start_and_finish_for_object(evidence_dict: dict, interval: int, obj_id: int) -> Tuple[int, int]:
     """Retrieves the start and finish timesteps for when an object is visible in a given evidence dict
 
     Args:
@@ -502,11 +442,7 @@ def get_evidence_start_and_finish_for_object(
 
 
 def get_discretized_evidence_for_object(
-    evidence_dict: dict,
-    interval: int,
-    obj_id: int,
-    up_to: int = None,
-    init_evidence_dict=None,
+    evidence_dict: dict, interval: int, obj_id: int, up_to: int = None, init_evidence_dict=None,
 ) -> dict:
     if not init_evidence_dict:
         discr_evidence_dict = {}
@@ -522,9 +458,7 @@ def get_discretized_evidence_for_object(
                 if up_to is not None and timestep >= up_to:
                     break
                 # print("("+t[0] + str(obj_id) + ", " + str(t[1]+interval)+")", evidence_dict[o][t])
-                discr_evidence_dict[
-                    (t[0] + "_Evidence_" + str(obj_id), timestep + 1)
-                ] = evidence_dict[o][t]
+                discr_evidence_dict[(t[0] + "_Evidence_" + str(obj_id), timestep + 1)] = evidence_dict[o][t]
     return discr_evidence_dict
 
 
@@ -579,9 +513,7 @@ def yolo_to_evidence(data: dict, final_timestep: int, interval: int):
             new_time += 1
             if i in data:
                 color = list(data[i].keys())[0]
-                vision_evidence[new_time] = {
-                    "vision_" + str(new_time + 1): colors[color]
-                }
+                vision_evidence[new_time] = {"vision_" + str(new_time + 1): colors[color]}
     return vision_evidence
 
 

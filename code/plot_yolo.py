@@ -3,11 +3,12 @@ from pathlib import Path
 import re
 import argparse
 
+# The output from YOLO comes from command line and is piped into a text file.
+# This tool is used to generate plots from those text files.
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--filepath", "-f", type=str, help="path to a .txt file with output from YOLO"
-    )
+    parser.add_argument("--filepath", "-f", type=str, help="path to a .txt file with output from YOLO")
     args = parser.parse_args()
     filepath = args.filepath
     lines = {}
@@ -25,19 +26,13 @@ if __name__ == "__main__":
 
     plt.figure()
     plt.plot(
-        [x / 30 for x in range(1, i + 1)],
-        [lines.get(x, {}).get("G", 0) / 100 for x in range(1, i + 1)],
-        "g-",
+        [x / 30 for x in range(1, i + 1)], [lines.get(x, {}).get("G", 0) / 100 for x in range(1, i + 1)], "g-",
     )
     plt.plot(
-        [x / 30 for x in range(1, i + 1)],
-        [lines.get(x, {}).get("R", 0) / 100 for x in range(1, i + 1)],
-        "r-",
+        [x / 30 for x in range(1, i + 1)], [lines.get(x, {}).get("R", 0) / 100 for x in range(1, i + 1)], "r-",
     )
     plt.plot(
-        [x / 30 for x in range(1, i + 1)],
-        [lines.get(x, {}).get("Y", 0) / 100 for x in range(1, i + 1)],
-        "y-",
+        [x / 30 for x in range(1, i + 1)], [lines.get(x, {}).get("Y", 0) / 100 for x in range(1, i + 1)], "y-",
     )
     plt.ylabel("probability of light state")
     plt.xlabel("time in seconds")

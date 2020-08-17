@@ -13,6 +13,8 @@ import argparse
 
 import plot_styling as ps
 
+# The output from YOLO comes from command line and is piped into a text file.
+# This tool first smoothes out the YOLO output using a HMM model and then plots the output
 
 def load_cpt(filepath: Path, epsilon: float = 0):
     labeled_dataframe = pd.read_csv(filepath)
@@ -24,9 +26,7 @@ def load_cpt(filepath: Path, epsilon: float = 0):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--filepath", "-f", type=str, help="path to a .txt file with output from YOLO"
-    )
+    parser.add_argument("--filepath", "-f", type=str, help="path to a .txt file with output from YOLO")
     args = parser.parse_args()
     filepath = args.filepath
     lines = {}
@@ -44,15 +44,9 @@ if __name__ == "__main__":
 
     # priors
     # vision_accuracy = load_cpt('params/vision_evidence.csv', epsilon = .15)
-    red_emission = DiscreteDistribution(
-        {"red": 95.0 / 100, "green": 4.0 / 100, "yellow": 1.0 / 100}
-    )
-    green_emission = DiscreteDistribution(
-        {"red": 4.0 / 100, "green": 95.0 / 100, "yellow": 1.0 / 100}
-    )
-    yellow_emission = DiscreteDistribution(
-        {"red": 4.0 / 100, "green": 1.0 / 100, "yellow": 95.0 / 100}
-    )
+    red_emission = DiscreteDistribution({"red": 95.0 / 100, "green": 4.0 / 100, "yellow": 1.0 / 100})
+    green_emission = DiscreteDistribution({"red": 4.0 / 100, "green": 95.0 / 100, "yellow": 1.0 / 100})
+    yellow_emission = DiscreteDistribution({"red": 4.0 / 100, "green": 1.0 / 100, "yellow": 95.0 / 100})
     vision_accuracy = [red_emission, green_emission, yellow_emission]
     # transition matrix
     trans_mat = load_cpt("params/single_light_model.csv", epsilon=0).T
@@ -88,26 +82,17 @@ if __name__ == "__main__":
     end_time = 29
     ax.set_xlim([0, end_time])
     ax.set_ylim([0, 1])
-    r = ax.fill_between(
-        [x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)],
-        preds[: end_time * 30, 0],
-    )
+    r = ax.fill_between([x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)], preds[: end_time * 30, 0],)
     r.set_facecolors([[0.74, 0.33, 0.33, 0.3]])
     r.set_edgecolors([[0.74, 0.33, 0.33, 0.75]])
     r.set_linewidths([2])
 
-    g = ax.fill_between(
-        [x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)],
-        preds[: end_time * 30, 1],
-    )
+    g = ax.fill_between([x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)], preds[: end_time * 30, 1],)
     g.set_facecolors([[0.48, 0.69, 0.41, 0.3]])
     g.set_edgecolors([[0.48, 0.69, 0.41, 0.75]])
     g.set_linewidths([2])
 
-    y = ax.fill_between(
-        [x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)],
-        preds[: end_time * 30, 2],
-    )
+    y = ax.fill_between([x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)], preds[: end_time * 30, 2],)
     y.set_facecolors([[0.86, 0.6, 0.16, 0.3]])
     y.set_edgecolors([[0.86, 0.6, 0.16, 0.75]])
     y.set_linewidths([2])

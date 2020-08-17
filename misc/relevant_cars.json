@@ -3,120 +3,168 @@
     "1d676737-4110-3f7e-bec0-0c90f74c248f":{
       "skip": true,
       "adj_cars":[],
-      "cross_cars":[]
+      "cross_cars":[],
+      "ground_truth": []
     },
     "64c12551-adb9-36e3-a0c1-e43a0e9f3845": {
+      "skip": false,
       "adj_cars": [0, 1, 2],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "70d2aea5-dbeb-333d-b21e-76a7f2f1ba1c": {
       "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "84c35ea7-1a99-3a0c-a3ea-c5915d68acbc": {
       "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "53037376_5303_5303_5303_553038557184": {
       "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "b1ca08f1-24b0-3c39-ba4e-d5a92868462c": {
+      "skip": false,
       "adj_cars": [9, 11],
-      "cross_cars": [5, 6, 7, 8, 10, 15, 19, 23]
+      "cross_cars": [5, 6, 7, 8, 10, 15, 19, 23],
+      "ground_truth": []
     }
   },
   "train2": {
     "5c251c22-11b2-3278-835c-0cf3cdee3f44": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "10b3a1d8-e56c-38be-aaf7-ef2f862a5c4e": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "85bc130b-97ae-37fb-a129-4fc07c80cca7": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "577ea60d-7cc0-34a4-a8ff-0401e5ab9c62": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "29789600_2979_2979_2979_429790834688": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "88538208_8853_8853_8853_388539396096": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "aeb73d7a-8257-3225-972e-99307b3a5cb0": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "ebe7a98b-d383-343b-96d6-9e681e2c6a36": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "fa0b626f-03df-35a0-8447-021088814b8b": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "fb471bd6-7c81-3d93-ad12-ac54a28beb84": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     }
   },
   "train3": {
     "02cf0ce1-699a-373b-86c0-eb6fd5f4697a": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "08a8b7f0-c317-3bdb-b3dc-b7c9b6d033e2": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "9da4ca63-f524-3b38-8c8b-624f17518574": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "49d66e75-3ce6-316b-b589-f659c7ef5e6d": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "52af191b-ba56-326c-b569-e37790db40f3": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "919be600-da69-3f09-b0fd-f42f7eb2e097": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     },
     "74750688_7475_7475_7475_474752397312": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     }
   },
   "train4": {
     "2d12da1d-5238-3870-bfbc-b281d5e8c1a1": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     }
   },
   "val": {
     "7d37fc6b-1028-3f6f-b980-adb5fa73021e": {
+      "skip": true,
       "adj_cars": [],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     }
   },
   "sample":{
     "c6911883-1843-3727-8eaa-41dc8cda8993": {
+      "skip": false,
       "adj_cars": [9, 13],
-      "cross_cars": []
+      "cross_cars": [],
+      "ground_truth": []
     }
   }
 }

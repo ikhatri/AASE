@@ -70,6 +70,7 @@ if __name__ == "__main__":
     argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath("train1")).get(log_id)
     end_time = 299
     print(argo_data)
+    print("City Code: {argo_data.city_name}")
     city_map = ArgoverseMap()
     # visualize(city_map, argo_data, end_time, obj_ids=[3, 4])
 
@@ -78,9 +79,7 @@ if __name__ == "__main__":
     pom_evidence_dicts = [{} for t in range(0, (end_time // interval) + 2)]
     for i in range(len(evidence_dict)):
         if i in adj_obj_ids or i in cross_obj_ids:
-            discr_evidence_dict = get_discretized_evidence_for_object(
-                evidence_dict, interval, i
-            )
+            discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
             for t in discr_evidence_dict:
                 key, value, timestep = convert_pgmpy_pom(t, discr_evidence_dict[t])
                 pom_evidence_dicts[timestep][key] = value
@@ -101,9 +100,7 @@ if __name__ == "__main__":
         start = timeit.default_timer()
         next_belief, out = predict_DBN(dbn, names, evidence, i + 1, iterations=7)
         pom_out = pom_out + out
-        dbn, names = iterate_DBN(
-            filepath, adj_obj_ids, cross_obj_ids, next_belief, i + 1
-        )
+        dbn, names = iterate_DBN(filepath, adj_obj_ids, cross_obj_ids, next_belief, i + 1)
         dbn.bake()
         stop = timeit.default_timer()
         execution_time = stop - start
