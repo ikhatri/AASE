@@ -3,16 +3,18 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-from matplotlib import pyplot as plt
-from pathlib import Path
 import logging
-from dataloader import *
-from argoverse.map_representation.map_api import ArgoverseMap
-from model_pom import *
 import math
 import re
+from pathlib import Path
+
 import pomegranate as pom
+from matplotlib import pyplot as plt
+
 import plot_styling as ps
+from argoverse.map_representation.map_api import ArgoverseMap
+from dataloader import *
+from model_pom import *
 
 SAMPLE_DIR = Path("sample-data/")
 GLARE_DIR = Path("glare_example/")

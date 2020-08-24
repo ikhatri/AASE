@@ -1,5 +1,6 @@
-import plot_styling as ps
 import matplotlib.pyplot as plt
+
+import plot_styling as ps
 
 if __name__ == "__main__":
     plt.figure()

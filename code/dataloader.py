@@ -3,21 +3,21 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-import argoverse
-import os
+import json
 import logging
-import numpy as np
 import math
 import re
-import json
-from mayavi import mlab
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+from mayavi import mlab
+
 from argoverse.data_loading.argoverse_tracking_loader import ArgoverseTrackingLoader
 from argoverse.map_representation.map_api import ArgoverseMap
-from argoverse.utils.geometry import rotate_polygon_about_pt
 from argoverse.utils.centerline_utils import get_oracle_from_candidate_centerlines
+from argoverse.utils.geometry import rotate_polygon_about_pt
 
 SAMPLE_DIR = Path("sample-data/")
 GLARE_DIR = Path("glare_example/")

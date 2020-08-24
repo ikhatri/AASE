@@ -5,9 +5,11 @@
 
 # Imports
 from matplotlib import pyplot as plt
+
 import plot_styling as ps
 
-# This file contains plotting code for all the results.
+# This file contains plotting code for all the results from dictionaries formatted in the default pomegranate output
+# Additionally the runtime of each experiment gets saved and can be plotted from here
 
 def plot_probs(probs: dict, interval: int):
     # Reconfiguring the pom output dict to be plottable

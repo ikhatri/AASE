@@ -3,13 +3,14 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-from pomegranate import *
+import argparse
+import re
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from pathlib import Path
-import re
-import argparse
+from pomegranate import *
 
 import plot_styling as ps
 

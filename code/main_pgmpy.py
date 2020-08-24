@@ -3,24 +3,16 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-from matplotlib import pyplot as plt
-from pathlib import Path
 import logging
-from dataloader import (
-    load_all_logs,
-    get_evidence,
-    get_discretized_evidence_for_object,
-    visualize,
-    get_evidence_start_and_finish_for_object,
-)
-from argoverse.map_representation.map_api import ArgoverseMap
-from model_pgmpy import (
-    setup_traffic_DBN,
-    setup_backbone_DBN,
-    add_cars_DBN,
-    get_inference_model,
-)
 import math
+from pathlib import Path
+
+from matplotlib import pyplot as plt
+
+from argoverse.map_representation.map_api import ArgoverseMap
+from dataloader import (get_discretized_evidence_for_object, get_evidence, get_evidence_start_and_finish_for_object,
+                        load_all_logs, visualize)
+from model_pgmpy import add_cars_DBN, get_inference_model, setup_backbone_DBN, setup_traffic_DBN
 
 SAMPLE_DIR = Path("sample-data/")
 GLARE_DIR = Path("glare_example/")

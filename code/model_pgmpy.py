@@ -3,13 +3,14 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-import pandas as pd
-import numpy as np
 from pathlib import Path
-from pgmpy.models import DynamicBayesianNetwork as DBN
+
+import numpy as np
+import pandas as pd
 from pgmpy.factors.discrete import TabularCPD as cpd
 from pgmpy.inference.dbn_inference import DBNInference
-from pgmpy.inference.ExactInference import VariableElimination, BeliefPropagation
+from pgmpy.inference.ExactInference import BeliefPropagation, VariableElimination
+from pgmpy.models import DynamicBayesianNetwork as DBN
 
 
 def setup_model(filepath: Path, epsilon: float = 0):

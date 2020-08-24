@@ -1,7 +1,8 @@
-from matplotlib import pyplot as plt
-from pathlib import Path
-import re
 import argparse
+import re
+from pathlib import Path
+
+from matplotlib import pyplot as plt
 
 # The output from YOLO comes from command line and is piped into a text file.
 # This tool is used to generate plots from those text files.

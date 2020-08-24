@@ -1,9 +1,9 @@
 # Style script adapted from Kyle Vedder
 # https://github.com/kylevedder
 
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def set_font(size):

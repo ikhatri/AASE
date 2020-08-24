@@ -3,11 +3,12 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-import pandas as pd
-import numpy as np
-from pathlib import Path
-import pomegranate as pom
 import timeit
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import pomegranate as pom
 
 
 def load_cpt(filepath: Path, epsilon: float = 0):
