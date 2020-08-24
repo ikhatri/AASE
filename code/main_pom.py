@@ -74,7 +74,7 @@ if __name__ == "__main__":
     print(argo_data)
     print("City Code: {argo_data.city_name}")
     city_map = ArgoverseMap()
-    # visualize(city_map, argo_data, end_time, obj_ids=[3, 4])
+    # visualize(city_map, argo_data, end_time)
 
     evidence_dict = get_evidence(city_map, argo_data, end_time)
     total_discr_evidence_dict = {}

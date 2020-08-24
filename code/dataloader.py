@@ -186,7 +186,6 @@ def visualize(
     argo_maps: ArgoverseMap,
     argo_data: ArgoverseTrackingLoader,
     end_time: int,
-    obj_ids: list = [],
     plot_trajectories: bool = True,
     plot_lidar: bool = True,
     plot_bbox: bool = True,
@@ -199,15 +198,11 @@ def visualize(
         argo_maps (ArgoverseMap): The map object
         argo_data (ArgoverseTrackingLoader): The argoverse dataloader object
         end_time (int): The end time, this is the timestep for which LiDAR is plotted and trajectories are plotted from 0-end
-        obj_ids (list, optional): A list of object IDs to be visualized, if none are passed in plots all. Defaults to [].
         plot_trajectories (bool, optional): If trajectories should be shown. Defaults to True.
         plot_lidar (bool, optional): If LiDar should be shown. Defaults to True.
         plot_bbox (bool, optional): If bounding boxes should be shown. Defaults to True.
         plot_segments (bool, optional): If lane segments should be shown. Defaults to True.
         show (bool, optional): If mlab.show() should be called at the end of the function. Defaults to True.
-
-    TODO:
-        - Remove the fixed coloring of obj ids and just print the id as text
     """
     mlab.figure(bgcolor=(0.2, 0.2, 0.2))
     city_to_egovehicle_se3 = argo_data.get_pose(end_time)
@@ -234,8 +229,8 @@ def visualize(
         colors = [
             (1, 0, 0),
             (0, 1, 0),
-            (0, 0, 1),
-            (1, 1, 0),
+            # (0, 0, 1), # blue, removed
+            # (1, 1, 0), # yellow, removed
             (0, 1, 1),
             (1, 0, 1),
             (1, 0.5, 0.5),
@@ -246,13 +241,12 @@ def visualize(
             (1, 0.5, 1),
         ]
         for i, obj in enumerate(data):
-            if i in obj_ids:
-                color = colors[i % 12]
-                print(i, obj, color)
-                bbox = rotate_polygon_about_pt(
-                    shitty_dict[obj].as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3),
-                )
-                draw_3d_bbox(bbox, color=color)
+            color = colors[i % len(colors)]
+            bbox = rotate_polygon_about_pt(
+                shitty_dict[obj].as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3),
+            )
+            draw_3d_bbox(bbox, color=color)
+            mlab.text3d(*bbox[0], f"Object ID: {i}", color=(1, 1, 1), scale=0.5)
     if plot_trajectories:
         for o in data:
             traj = np.array([data[o][k]["position"] for k in data[o].keys()])
