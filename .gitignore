@@ -135,3 +135,6 @@ dmypy.json
 
 # ignore all mp4s
 *.mp4
+
+# ignore the graphs folder
+graphs/
