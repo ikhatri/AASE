@@ -17,6 +17,7 @@ import plot_styling as ps
 # The output from YOLO comes from command line and is piped into a text file.
 # This tool first smoothes out the YOLO output using a HMM model and then plots the output
 
+
 def load_cpt(filepath: Path, epsilon: float = 0):
     labeled_dataframe = pd.read_csv(filepath)
     labeled_dataframe.set_index("states", inplace=True)

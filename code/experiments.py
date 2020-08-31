@@ -22,7 +22,9 @@ ARGOVERSE_TRACKING = Path("/home/ikhatri/argoverse/argoverse-api/argoverse-track
 RELEVANT_JSON = Path("misc/relevant_cars.json")
 PARAMS_DIR = Path("params/")
 RESULTS_DIR = Path("results/")
+INTERVAL = 10  # out of 10 hz, so it's every 5th image of the 10/second that we have
 logger = logging.getLogger(__name__)
+
 
 def write_to_csv(folder: str, log: str, predictions: List, runtime: List):
     """ A function to write out the results into csv files
@@ -36,14 +38,14 @@ def write_to_csv(folder: str, log: str, predictions: List, runtime: List):
     with open(RESULTS_DIR.joinpath(f"{folder}/{log}.csv"), "w+", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
         keys = ["red", "green", "yellow"]
-        for e in range(2): # Because there's 2 experiments per log, aase and aase + yolo
+        for e in range(2):  # Because there's 2 experiments per log, aase and aase + yolo
             for k in keys:
-                writer.writerow([k]+[predictions[e][t][k] for t in range(len(predictions[e]))])
-            writer.writerow(["runtime"]+runtime[e])
+                writer.writerow([k] + [predictions[e][t][k] for t in range(len(predictions[e]))])
+            writer.writerow(["runtime"] + runtime[e])
+
 
 if __name__ == "__main__":
     print("Using GPU?", pom.utils.is_gpu_enabled())
-    interval = 10  # out of 10 hz, so it's every 5th image of the 10/second that we have
     folders = ["train1"]  # , "train2", "train3", "train4", "val"]
     city_map = ArgoverseMap()
 
@@ -60,10 +62,10 @@ if __name__ == "__main__":
                 cross_obj_ids = relevant_cars[log_id]["cross_cars"]
                 evidence_dict = get_evidence(city_map, argo_data, end_time)
                 total_discr_evidence_dict = {}
-                pom_evidence_dicts = [{} for t in range(0, (end_time // interval) + 2)]
+                pom_evidence_dicts = [{} for t in range(0, (end_time // INTERVAL) + 2)]
                 for i in range(len(evidence_dict)):
                     if i in adj_obj_ids or i in cross_obj_ids:
-                        discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, interval, i)
+                        discr_evidence_dict = get_discretized_evidence_for_object(evidence_dict, INTERVAL, i)
                         for t in discr_evidence_dict:
                             key, value, timestep = convert_pgmpy_pom(t, discr_evidence_dict[t])
                             pom_evidence_dicts[timestep][key] = value
@@ -72,16 +74,16 @@ if __name__ == "__main__":
                 # Next we make a copy of the evidence dictionaries with YOLO included (ie. not blank)
                 evidence_with_yolo = pom_evidence_dicts.copy()
                 ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath(folder + "/" + log_id + "/rfc.txt"))
-                yolo_evidence = yolo_to_evidence(yolo, ft, interval)
+                yolo_evidence = yolo_to_evidence(yolo, ft, INTERVAL)
                 for t, e in enumerate(evidence_with_yolo):
                     if t in yolo_evidence:
                         e.update(yolo_evidence[t])
 
                 filepath = Path("params")
                 all_evidence = [pom_evidence_dicts, evidence_with_yolo]
-                all_predictions = [[], []] # [aase, aase+yolo]
+                all_predictions = [[], []]  # [aase, aase+yolo]
                 timing = [[], []]
-                for which_evidence, evidence_list in enumerate(all_evidence): # 2 experiments
+                for which_evidence, evidence_list in enumerate(all_evidence):  # 2 experiments
                     dbn, names = init_DBN(filepath, adj_obj_ids, cross_obj_ids)
                     dbn.bake()
                     for i, evidence in enumerate(evidence_list):

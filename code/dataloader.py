@@ -242,9 +242,7 @@ def visualize(
         ]
         for i, obj in enumerate(data):
             color = colors[i % len(colors)]
-            bbox = rotate_polygon_about_pt(
-                shitty_dict[obj].as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3),
-            )
+            bbox = rotate_polygon_about_pt(shitty_dict[obj].as_3d_bbox(), city_to_egovehicle_se3.rotation, np.zeros(3),)
             draw_3d_bbox(bbox, color=color)
             mlab.text3d(*bbox[0], f"Object ID: {i}", color=(1, 1, 1), scale=0.5)
     if plot_trajectories:
