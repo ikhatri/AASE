@@ -11,6 +11,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+import click
 import numpy as np
 from mayavi import mlab
 
@@ -515,12 +516,22 @@ def load_relevant_cars(json_file: Path, subfolder: str):
     return data[subfolder]
 
 
-if __name__ == "__main__":
-    end_time = 150
-    interval = 10
-    d = load_all_logs(SAMPLE_DIR)
+@click.command()
+@click.argument("basedir")
+@click.argument("logid")
+def main(basedir: str, logid: str):
+    fullpath = Path(f"/home/ikhatri/argoverse/argoverse-api/argoverse-tracking/{basedir}")
+    argo_loader = load_all_logs(fullpath)
+    argo_data = argo_loader.get(logid)
+    print(argo_data)
+    end_time = argo_data.num_lidar_frame - 1
     mappymap = ArgoverseMap()
-    # visualize(mappymap, d, end_time)
+    visualize(mappymap, argo_data, end_time)
+
+
+if __name__ == "__main__":
+    main()
+    # interval = 10
     # evidence_dict = get_evidence(mappymap, d, end_time)
     # pom_evidence_dict = {}
     # for i in range(len(evidence_dict)):

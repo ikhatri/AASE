@@ -26,24 +26,25 @@ def load_cpt(filepath: Path, epsilon: float = 0):
     return model_weights
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--filepath", "-f", type=str, help="path to a .txt file with output from YOLO")
-    args = parser.parse_args()
-    filepath = args.filepath
+def read_txt(filepath: Path) -> tuple:
+    """ A function to parse the color and confidence values from a YOLO output .txt file."""
     lines = {}
-    i = 0
+    timesteps = 0
     with open(filepath, "r") as f:
         for l in f:
             if l[0] == "O":
-                i += 1
+                timesteps += 1
             if l != "":
                 out = l.split()
                 if len(out) > 0:
                     if out[0] == "Green:" or out[0] == "Red:" or out[0] == "Yellow:":
                         c = re.search("[0-9]+", l.split()[1]).group(0)
-                        lines[i] = {out[0][0]: int(c)}
+                        lines[timesteps] = {out[0][0]: int(c)}
+    return timesteps, lines
 
+
+def yolo_hmm(timesteps: int, lines: dict) -> np.array:
+    """ Smoothes out the YOLO outputs with a HMM."""
     # priors
     # vision_accuracy = load_cpt('params/vision_evidence.csv', epsilon = .15)
     red_emission = DiscreteDistribution({"red": 95.0 / 100, "green": 4.0 / 100, "yellow": 1.0 / 100})
@@ -56,9 +57,9 @@ if __name__ == "__main__":
     # model
     model = HiddenMarkovModel.from_matrix(trans_mat, vision_accuracy, initial_prob)
     # yolo data
-    r = [lines.get(x, {}).get("R", 0) / 100 for x in range(1, i + 1)]
-    g = [lines.get(x, {}).get("G", 0) / 100 for x in range(1, i + 1)]
-    y = [lines.get(x, {}).get("Y", 0) / 100 for x in range(1, i + 1)]
+    r = [lines.get(x, {}).get("R", 0) / 100 for x in range(1, timesteps + 1)]
+    g = [lines.get(x, {}).get("G", 0) / 100 for x in range(1, timesteps + 1)]
+    y = [lines.get(x, {}).get("Y", 0) / 100 for x in range(1, timesteps + 1)]
     sequence = []
     for idx, _ in enumerate(g):
         if g[idx] > r[idx] and g[idx] > y[idx]:
@@ -74,32 +75,14 @@ if __name__ == "__main__":
     for idx in range(1, len(sequence)):
         preds.append(model.predict_proba(sequence[:idx])[-1])
         # print(", ".join(state.name for i, state in model.viterbi(sequence[:idx])[1])[-1])
+    return np.array(preds)
 
-    preds = np.array(preds)
 
-    plt.figure()
-    ps.setupfig()
-    ax = plt.gca()
-    ps.grid()
-    end_time = 29
-    ax.set_xlim([0, end_time])
-    ax.set_ylim([0, 1])
-    r = ax.fill_between([x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)], preds[: end_time * 30, 0],)
-    r.set_facecolors([[0.74, 0.33, 0.33, 0.3]])
-    r.set_edgecolors([[0.74, 0.33, 0.33, 0.75]])
-    r.set_linewidths([2])
-
-    g = ax.fill_between([x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)], preds[: end_time * 30, 1],)
-    g.set_facecolors([[0.48, 0.69, 0.41, 0.3]])
-    g.set_edgecolors([[0.48, 0.69, 0.41, 0.75]])
-    g.set_linewidths([2])
-
-    y = ax.fill_between([x / 30 for x in range(1, len(preds[: end_time * 30]) + 1)], preds[: end_time * 30, 2],)
-    y.set_facecolors([[0.86, 0.6, 0.16, 0.3]])
-    y.set_edgecolors([[0.86, 0.6, 0.16, 0.75]])
-    y.set_linewidths([2])
-    # plt.title('HMM normalized YOLO predictions')
-    # plt.ylabel('probability of light state')
-    # plt.xlabel('time in seconds')
-    plt.tight_layout()
-    plt.show()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--filepath", "-f", type=str, help="path to a .txt file with output from YOLO")
+    args = parser.parse_args()
+    filepath = args.filepath
+    max_time, yolo_data = read_txt(Path(filepath))
+    preds = yolo_hmm(max_time, yolo_data)
+    # plot_yolo_hmm(preds)

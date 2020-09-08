@@ -1,40 +1,47 @@
 {
+  "description": "This file contains the parameters for the experiments in the paper. The data is a subset of the Argoverse 1.0 tracking dataset.",
   "train1": {
     "1d676737-4110-3f7e-bec0-0c90f74c248f":{
-      "skip": true,
-      "adj_cars":[],
+      "skip": false,
+      "adj_cars":[0, 24],
       "cross_cars":[],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 15],
+      "comment": "This scenario contains multiple traffic lights that are all the same color (green). For simplicity we are combining these together as 1 long road with a single green light."
     },
     "64c12551-adb9-36e3-a0c1-e43a0e9f3845": {
       "skip": false,
       "adj_cars": [0, 1, 2],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 2, "G", 2, 15],
+      "comment": "Our token example. The light is completely obscured by glare from the sun."
     },
     "70d2aea5-dbeb-333d-b21e-76a7f2f1ba1c": {
-      "skip": true,
+      "skip": false,
       "adj_cars": [],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 8],
+      "comment": "A complex Y shaped 5 way intersection. We have simply listed no cars and run the scenario anyway. This is to demonstrate that our model collapses to an HMM in the absence of relevant cars."
     },
     "84c35ea7-1a99-3a0c-a3ea-c5915d68acbc": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [0],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 12],
+      "comment": "Large traffic jam in Miami, only 1 car in our lane."
     },
     "53037376_5303_5303_5303_553038557184": {
       "skip": true,
       "adj_cars": [],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": [],
+      "comment": "Delete, no actual traffic light."
     },
     "b1ca08f1-24b0-3c39-ba4e-d5a92868462c": {
       "skip": false,
       "adj_cars": [9, 11],
       "cross_cars": [5, 6, 7, 8, 10, 15, 19, 23],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 27, "G", 27, 29],
+      "comment": "Example of performance with many cars. We are doing inference on 10 in this example."
     }
   },
   "train2": {
@@ -42,121 +49,140 @@
       "skip": true,
       "adj_cars": [],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": [],
+      "comment": "Delete, no actual traffic light."
     },
     "10b3a1d8-e56c-38be-aaf7-ef2f862a5c4e": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [0, 1, 2, 6, 9, 14],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 3, "G", 3, 26],
+      "comment": "Simple red to green in miami."
     },
     "85bc130b-97ae-37fb-a129-4fc07c80cca7": {
-      "skip": true,
-      "adj_cars": [],
-      "cross_cars": [],
-      "ground_truth": []
+      "skip": false,
+      "adj_cars": [1],
+      "cross_cars": [0, 3, 4],
+      "ground_truth": ["R", 0, 13, "G", 13, 15],
+      "comment": "Simple red to green Pittsburgh."
     },
     "577ea60d-7cc0-34a4-a8ff-0401e5ab9c62": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [4, 9],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 18],
+      "comment": "Green with a traffic jam in Miami. All impacted except 4 & 9. [1, 4, 9, 10, 15, 19] could be used."
     },
     "29789600_2979_2979_2979_429790834688": {
-      "skip": true,
-      "adj_cars": [],
-      "cross_cars": [],
-      "ground_truth": []
+      "skip": false,
+      "adj_cars": [0, 1, 2],
+      "cross_cars": [5, 10, 12, 13, 14, 15],
+      "ground_truth": ["R", 0, 22],
+      "comment": "Simple all red in Miami."
     },
     "88538208_8853_8853_8853_388539396096": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [0, 1, 2, 3],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 12, "G", 12, 24],
+      "comment": "Red to green, Pittsburgh at night."
     },
     "aeb73d7a-8257-3225-972e-99307b3a5cb0": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [3, 28],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 19],
+      "comment": "Two greens in Miami, combined for simplicity again."
     },
     "ebe7a98b-d383-343b-96d6-9e681e2c6a36": {
-      "skip": true,
-      "adj_cars": [],
-      "cross_cars": [],
-      "ground_truth": []
+      "skip": false,
+      "adj_cars": [0, 1, 6],
+      "cross_cars": [5, 9],
+      "ground_truth": ["R", 0, 9, "G", 9, 15],
+      "comment": "Simple red to green in Pittsburgh, the car ahead is creeping while red."
     },
     "fa0b626f-03df-35a0-8447-021088814b8b": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [2, 3, 5, 10, 13],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 5, "G", 5, 15],
+      "comment": "Interesting red to green in Pittsburgh where we get cut off by a parked car."
     },
     "fb471bd6-7c81-3d93-ad12-ac54a28beb84": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [0, 1, 2, 3],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 1, "G", 1, 15],
+      "comment": "Simple red (1 frame) to green in Pittsburgh"
     }
   },
   "train3": {
     "02cf0ce1-699a-373b-86c0-eb6fd5f4697a": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [1, 2, 6],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 5, "G", 5, 15],
+      "comment": "Red to green in Pittsburgh, rain drops on the camera lens."
     },
     "08a8b7f0-c317-3bdb-b3dc-b7c9b6d033e2": {
-      "skip": true,
-      "adj_cars": [],
-      "cross_cars": [],
-      "ground_truth": []
+      "skip": false,
+      "adj_cars": [9],
+      "cross_cars": [8],
+      "ground_truth": ["G", 0, 15],
+      "comment": "Green straight through in Pittsburgh, only 2 relevant cars though."
     },
     "9da4ca63-f524-3b38-8c8b-624f17518574": {
-      "skip": true,
-      "adj_cars": [],
-      "cross_cars": [],
-      "ground_truth": []
+      "skip": false,
+      "adj_cars": [0],
+      "cross_cars": [1],
+      "ground_truth": ["G", 0, 22],
+      "comment": "Green with construction in Miami. Bus gets impacted."
     },
     "49d66e75-3ce6-316b-b589-f659c7ef5e6d": {
       "skip": true,
       "adj_cars": [],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": [],
+      "comment": "Simple red (1 second) to green Pittsburgh. Forced to skip, broken labels."
     },
     "52af191b-ba56-326c-b569-e37790db40f3": {
-      "skip": true,
-      "adj_cars": [],
-      "cross_cars": [],
-      "ground_truth": []
+      "skip": false,
+      "adj_cars": [0],
+      "cross_cars": [1],
+      "ground_truth": ["G", 0, 5],
+      "comment": "1 simple green straight through in Pittsburgh at the start."
     },
     "919be600-da69-3f09-b0fd-f42f7eb2e097": {
       "skip": true,
       "adj_cars": [],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": [],
+      "comment": "Red to green Pittsburgh. Force skip, broken labels."
     },
     "74750688_7475_7475_7475_474752397312": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [9, 10],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 13, "G", 13, 29],
+      "comment": "Red to green Miami"
     }
   },
   "train4": {
     "2d12da1d-5238-3870-bfbc-b281d5e8c1a1": {
-      "skip": true,
+      "skip": false,
       "adj_cars": [],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["R", 0, 1, "G", 1, 5],
+      "comment": "Red to green in Pittsburgh, no relevant cars."
     }
   },
   "val": {
     "7d37fc6b-1028-3f6f-b980-adb5fa73021e": {
-      "skip": true,
-      "adj_cars": [],
+      "skip": false,
+      "adj_cars": [12, 16, 24],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 15, "Y", 15, 19, "R", 19, 29],
+      "comment": "Two lights, both green to start and second turns to yellow and red during traffic. Super interesting example! Again combined into 1 for simplicity."
     }
   },
   "sample":{
@@ -164,7 +190,8 @@
       "skip": false,
       "adj_cars": [9, 13],
       "cross_cars": [],
-      "ground_truth": []
+      "ground_truth": ["G", 0, 15],
+      "comment": "Simple example all green in Pittsburgh."
     }
   }
 }

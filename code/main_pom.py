@@ -66,11 +66,11 @@ def plot_runtime(times: list):
 if __name__ == "__main__":
     print("Using GPU?", pom.utils.is_gpu_enabled())
     interval = 10  # out of 10 hz, so it's every 5th image of the 10/second that we have
-    adj_obj_ids = [9, 11]
-    cross_obj_ids = [5, 6, 7, 8, 10, 15, 19, 23]
-    log_id = "b1ca08f1-24b0-3c39-ba4e-d5a92868462c"
-    argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath("train1")).get(log_id)
-    end_time = 299
+    adj_obj_ids = [4, 9]
+    cross_obj_ids = []
+    log_id = "577ea60d-7cc0-34a4-a8ff-0401e5ab9c62"
+    argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath("train2")).get(log_id)
+    end_time = argo_data.num_lidar_frame - 1
     print(argo_data)
     print("City Code: {argo_data.city_name}")
     city_map = ArgoverseMap()
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                 pom_evidence_dicts[timestep][key] = value
     pom_evidence_dicts.pop(0)
 
-    ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath("train1/" + log_id + "/rfc.txt"))
+    ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath("train2/" + log_id + "/rfc.txt"))
     yolo_evidence = yolo_to_evidence(yolo, ft, interval)
     for t, e in enumerate(pom_evidence_dicts):
         if t in yolo_evidence:

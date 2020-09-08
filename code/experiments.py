@@ -5,6 +5,7 @@
 
 import csv
 import logging
+from copy import deepcopy
 from pathlib import Path
 from typing import List
 
@@ -13,6 +14,7 @@ import pomegranate as pom
 from argoverse.map_representation.map_api import ArgoverseMap
 from dataloader import *
 from model_pom import *
+from yolo_hmm import read_txt, yolo_hmm
 
 # This file is the main input point for running all of the experiments
 
@@ -26,7 +28,7 @@ INTERVAL = 10  # out of 10 hz, so it's every 5th image of the 10/second that we 
 logger = logging.getLogger(__name__)
 
 
-def write_to_csv(folder: str, log: str, predictions: List, runtime: List):
+def write_to_csv(folder: str, log: str, predictions: List, runtime: List, yolo_preds: np.array):
     """ A function to write out the results into csv files
 
     Args:
@@ -42,11 +44,12 @@ def write_to_csv(folder: str, log: str, predictions: List, runtime: List):
             for k in keys:
                 writer.writerow([k] + [predictions[e][t][k] for t in range(len(predictions[e]))])
             writer.writerow(["runtime"] + runtime[e])
+    np.savetxt(RESULTS_DIR.joinpath(f"{folder}/{log}_yolo.csv"), yolo_preds, delimiter=",")
 
 
 if __name__ == "__main__":
     print("Using GPU?", pom.utils.is_gpu_enabled())
-    folders = ["train1"]  # , "train2", "train3", "train4", "val"]
+    folders = ["train1", "train2", "train3", "train4", "val"]
     city_map = ArgoverseMap()
 
     # These first loops run through every single log in all the folders and load the position and velocity
@@ -57,7 +60,7 @@ if __name__ == "__main__":
         for log_id in relevant_cars:
             if relevant_cars[log_id].get("skip", False) is False:
                 argo_data = argo_loader.get(log_id)
-                end_time = argo_data.num_lidar_frame - 1
+                end_time = relevant_cars.get(log_id).get("ground_truth")[-1] * 10
                 adj_obj_ids = relevant_cars[log_id]["adj_cars"]
                 cross_obj_ids = relevant_cars[log_id]["cross_cars"]
                 evidence_dict = get_evidence(city_map, argo_data, end_time)
@@ -72,8 +75,8 @@ if __name__ == "__main__":
                 pom_evidence_dicts.pop(0)
 
                 # Next we make a copy of the evidence dictionaries with YOLO included (ie. not blank)
-                evidence_with_yolo = pom_evidence_dicts.copy()
-                ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath(folder + "/" + log_id + "/rfc.txt"))
+                evidence_with_yolo = deepcopy(pom_evidence_dicts)
+                ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath(f"{folder}/{log_id}/rfc.txt"))
                 yolo_evidence = yolo_to_evidence(yolo, ft, INTERVAL)
                 for t, e in enumerate(evidence_with_yolo):
                     if t in yolo_evidence:
@@ -95,4 +98,8 @@ if __name__ == "__main__":
                         stop = timeit.default_timer()
                         execution_time = stop - start
                         timing[which_evidence].append(execution_time)
-                write_to_csv(folder, log_id, all_predictions, timing)
+
+                # Before we write to a CSV we need to run an HMM on the YOLO output
+                max_timesteps, yolo_data = read_txt(ARGOVERSE_TRACKING.joinpath(f"{folder}/{log_id}/rfc.txt"))
+                yolo_hmm_predictions = yolo_hmm(max_timesteps, yolo_data)
+                write_to_csv(folder, log_id, all_predictions, timing, yolo_hmm_predictions)
