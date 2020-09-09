@@ -16,7 +16,19 @@ Once you finish running this command a conda environment called `aase` will be c
 Activate the environment and then proceed to manually install the Argoverse dataset API (which is not available as a pip or conda package) by following the instructions in [their repo](https://github.com/argoai/argoverse-api#installation). Note that you will not need to manually install the optional `mayavi` package as we include it as a part of the conda environment.
 
 ## Run experiments
-To run the experiments listed in the paper simply run `python code/experiments.py` and to generate plots from the experiments you can run `python code/plotting.py`.
+To run the experiments you'll need to complete a few steps in advance. First you need to download and compile [darknet](https://github.com/AlexeyAB/darknet). Then you'll need to download our trained weights and configuration files for the traffic light classifier from [link redacted](https://google.com). You will have downloaded 4 files:
+1. In the folder where you've cloned the darknet repository, create folders called `cfg`, `data`, and `backup` if they don't exist already.
+2. Move the downloaded files as follows:
+    - `data/tl.data`
+    - `data/tl.names`
+    - `cfg/yolov3-tl.cfg`
+    - `backup/yolov3-tl_final.weights`
+
+Next, before running the YOLO classifier, you'll need to turn the sequences of images from Argoverse into a video file. You can do this simply by running the `make_rfc_video.sh` script provided with our repo. Run it as follows: `./make_rfc_video.sh /path/to/argoverse-tracking/train1/log_id/`
+
+Finally you can run the YOLO model on these videos, simply run `run_darknet_video.sh` as follows: `./run_darknet_video.sh /path/to/darknet/ /path/to/argoverse-tracking/train1/log_id`. This script will create a new video that has the YOLO detections along with a text file that contains the YOLO detections & their confidences.
+
+To run the experiments listed in the paper simply run `python code/experiments.py` after modifying the `ARGOVERSE_TRACKING` variable in the script, and to generate plots from the experiments you can run `python code/plotting.py`. If you would like to tweak the cars chosen for a specific scenario you can modify `misc/relevant_cars.json` and if you'd like to visualize the object IDs for those cars in a LiDAR frame you can do so with the `code/dataloader.py` script which has some command line options for you to use.
 
 ## Todo
 1. ✔ Fix gt and lt sign depending on map? in dataloader

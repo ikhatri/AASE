@@ -519,12 +519,14 @@ def load_relevant_cars(json_file: Path, subfolder: str):
 @click.command()
 @click.argument("basedir")
 @click.argument("logid")
-def main(basedir: str, logid: str):
+@click.argument("end-time", required=False, default=None, type=int)
+def main(basedir: str, logid: str, end_time: int):
     fullpath = Path(f"/home/ikhatri/argoverse/argoverse-api/argoverse-tracking/{basedir}")
     argo_loader = load_all_logs(fullpath)
     argo_data = argo_loader.get(logid)
     print(argo_data)
-    end_time = argo_data.num_lidar_frame - 1
+    if end_time is None:
+        end_time = argo_data.num_lidar_frame - 1
     mappymap = ArgoverseMap()
     visualize(mappymap, argo_data, end_time)
 
