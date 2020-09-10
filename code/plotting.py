@@ -12,8 +12,7 @@ from matplotlib import pyplot as plt
 
 import plot_styling as ps
 from dataloader import load_relevant_cars
-from experiments import ARGOVERSE_TRACKING, INTERVAL, RELEVANT_JSON, RESULTS_DIR
-from yolo_hmm import read_txt, yolo_hmm
+from experiments import INTERVAL, RELEVANT_JSON, RESULTS_DIR
 
 # This file contains plotting code for all the results from dictionaries formatted in the default pomegranate output
 # Additionally the runtime of each experiment gets saved and can be plotted from here
