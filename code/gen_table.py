@@ -61,9 +61,6 @@ def hamming_distance(gt, aase, yolo):
     # gt = gt[:-2]
     # We shift by 2 seconds to account for human delay
     # aase = aase[2:]
-    print(len(gt))
-    print(len(aase))
-    print(len(yolo))
     for index, light in enumerate(gt):
         if light != aase[index]:
             hd_aase += 1

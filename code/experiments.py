@@ -100,6 +100,6 @@ if __name__ == "__main__":
                         timing[which_evidence].append(execution_time)
 
                 # Before we write to a CSV we need to run an HMM on the YOLO output
-                max_timesteps, yolo_data = read_txt(ARGOVERSE_TRACKING.joinpath(f"{folder}/{log_id}/rfc.txt"))
-                yolo_hmm_predictions = yolo_hmm(max_timesteps, yolo_data, PARAMS_DIR)
+                # max_timesteps, yolo_data = read_txt(ARGOVERSE_TRACKING.joinpath(f"{folder}/{log_id}/rfc.txt"))
+                yolo_hmm_predictions = yolo_hmm(ft, yolo, PARAMS_DIR)
                 write_to_csv(folder, log_id, all_predictions, timing, yolo_hmm_predictions)
