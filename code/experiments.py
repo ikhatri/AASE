@@ -77,6 +77,9 @@ if __name__ == "__main__":
                 # Next we make a copy of the evidence dictionaries with YOLO included (ie. not blank)
                 evidence_with_yolo = deepcopy(pom_evidence_dicts)
                 ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath(f"{folder}/{log_id}/rfc.txt"))
+                # yolo = simulate_random_loss(yolo, ft)
+                yolo = simulate_periodic_obstructions(yolo, ft)
+                print(yolo)
                 yolo_evidence = yolo_to_evidence(yolo, ft, INTERVAL)
                 for t, e in enumerate(evidence_with_yolo):
                     if t in yolo_evidence:

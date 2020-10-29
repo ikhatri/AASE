@@ -3,10 +3,8 @@
 # University of Massachusetts Amherst
 # Resource-Bounded Reasoning Lab
 
-import json
-import logging
-import math
-import re
+import json, logging, math, re, random
+
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -496,6 +494,52 @@ def parse_yolo(filepath: Path) -> Tuple[int, dict]:
                         data[i] = u
     return i, data
 
+#each sample is kept with fixed probability
+def simulate_random_loss(data: dict, final_timestep: int, drop_prob: float = .8):
+    lossy_data = {}
+    for i in range(final_timestep):
+        keep_sample = random.random()
+        if i in data and keep_sample > drop_prob:
+            lossy_data[i] = data[i]
+    return lossy_data
+
+def simulate_periodic_obstructions(data: dict, final_timestep: int, \
+                                   obs_drop_prob: float = .975,
+                                   obs_lognormal_mean_length: int = 1,
+                                   obs_lognormal_std: float = .75,
+                                   unobs_drop_prob: float = .4,
+                                   unobs_lognormal_mean_length: int = 1,
+                                   unobs_lognormal_std: float = .5):
+    lossy_data = {}
+    obstruction = False
+    resample = True
+    interval_start = 0
+
+    for i in range(final_timestep):
+        #start by generating the next interval of unobstruction followed by obstruction
+        if resample:
+            sampled_unobs_interval = np.random.lognormal(mean = unobs_lognormal_mean_length, sigma = unobs_lognormal_std) * 30
+            sampled_obs_interval =  np.random.lognormal(mean = obs_lognormal_mean_length, sigma = obs_lognormal_std) * 30
+            print(sampled_unobs_interval)
+            print(sampled_obs_interval)
+            resample = False
+        #if left period of unobstruction, switch to obstructed mode 
+        if not obstruction and i > interval_start + sampled_unobs_interval:
+            obstruction = True
+            interval_start = interval_start + sampled_unobs_interval
+        #if left period of obstruction, switch to unobstructed mode (no elif as could be same timestep) and resample next timestep
+        if obstruction and i > interval_start + sampled_obs_interval:
+            obstruction = False
+            interval_start = interval_start + sampled_obs_interval
+            resample = True
+        #set drop probability based on whether or not we are simulating an obstruction
+        drop_prob = obs_drop_prob if obstruction else unobs_drop_prob
+        keep_sample = random.random()
+
+        if i in data and keep_sample > drop_prob:
+            lossy_data[i] = data[i]
+
+    return lossy_data
 
 def yolo_to_evidence(data: dict, final_timestep: int, interval: int):
     new_time = 0
