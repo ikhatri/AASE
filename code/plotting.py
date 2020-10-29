@@ -38,13 +38,13 @@ def read_csv(folder: str, log: str):
 
 
 def plot_probs(probs: dict, interval: int):
-    timestep = interval/10  # we take every ith entry from 10/second
+    timestep = interval / 10  # we take every ith entry from 10/second
     x_axis = [x * timestep for x in range(len(probs["red"]))]
     plt.figure()
     ps.setupfig()
     ax = plt.gca()
     ps.grid()
-    ax.set_xlim([0, len(x_axis)*(interval/10) - 1])
+    ax.set_xlim([0, len(x_axis) * (interval / 10) - 1])
     ax.set_ylim([0, 1])
     r = ax.fill_between(x_axis, probs["red"])
     r.set_facecolors([RED + [0.3]])
@@ -71,7 +71,7 @@ def plot_runtime(times: list):
     plt.ylim(ymin=0)
 
 
-def plot_ground_truth(relevant_json: dict, log: str, ground_truth_hz: int=30):
+def plot_ground_truth(relevant_json: dict, log: str, ground_truth_hz: int = 30):
     ranges = relevant_json.get(log).get("ground_truth")
     end_time = ranges[-1] / ground_truth_hz
     plt.figure()
@@ -88,7 +88,8 @@ def plot_ground_truth(relevant_json: dict, log: str, ground_truth_hz: int=30):
         else:
             color = YELLOW
         fill = ax.fill_between(
-            [x/ground_truth_hz for x in range(ranges[i + 1], ranges[i + 2] + 1)], [1] * (ranges[i + 2] - ranges[i + 1] + 1)
+            [x / ground_truth_hz for x in range(ranges[i + 1], ranges[i + 2] + 1)],
+            [1] * (ranges[i + 2] - ranges[i + 1] + 1),
         )
         fill.set_facecolors([color + [0.3]])
         fill.set_edgecolors([color + [0.75]])
@@ -103,19 +104,19 @@ def plot_yolo_hmm(preds: np.array, relevant_json: dict, log: str) -> None:
     ps.setupfig()
     ax = plt.gca()
     ps.grid()
-    ax.set_xlim([0, end_time/30])
+    ax.set_xlim([0, end_time / 30])
     ax.set_ylim([0, 1])
-    r = ax.fill_between([x/30 for x in range(len(preds[: end_time]))], preds[: end_time, 0])
+    r = ax.fill_between([x / 30 for x in range(len(preds[:end_time]))], preds[:end_time, 0])
     r.set_facecolors([RED + [0.3]])
     r.set_edgecolors([RED + [0.75]])
     r.set_linewidths([2])
 
-    g = ax.fill_between([x/30 for x in range(len(preds[: end_time]))], preds[: end_time, 1])
+    g = ax.fill_between([x / 30 for x in range(len(preds[:end_time]))], preds[:end_time, 1])
     g.set_facecolors([GREEN + [0.3]])
     g.set_edgecolors([GREEN + [0.75]])
     g.set_linewidths([2])
 
-    y = ax.fill_between([x/30 for x in range(len(preds[: end_time]))], preds[: end_time, 2])
+    y = ax.fill_between([x / 30 for x in range(len(preds[:end_time]))], preds[:end_time, 2])
     y.set_facecolors([YELLOW + [0.3]])
     y.set_edgecolors([YELLOW + [0.75]])
     y.set_linewidths([2])

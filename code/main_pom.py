@@ -66,7 +66,7 @@ def plot_runtime(times: list):
 if __name__ == "__main__":
     print("Using GPU?", pom.utils.is_gpu_enabled())
     interval = 1  # out of 10 hz, so it's every 5th image of the 10/second that we have
-    adj_obj_ids = [0,1,2]
+    adj_obj_ids = [0, 1, 2]
     cross_obj_ids = []
     log_id = "64c12551-adb9-36e3-a0c1-e43a0e9f3845"
     argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath("train1")).get(log_id)

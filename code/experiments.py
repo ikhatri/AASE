@@ -60,7 +60,11 @@ if __name__ == "__main__":
         for log_id in relevant_cars:
             if relevant_cars[log_id].get("skip", False) is False:
                 argo_data = argo_loader.get(log_id)
-                end_time = relevant_cars.get(log_id).get("ground_truth")[-1] // 3 if relevant_cars.get(log_id).get("ground_truth")[-1] // 3 < argo_data.num_lidar_frame - 1 else argo_data.num_lidar_frame - 1
+                end_time = (
+                    relevant_cars.get(log_id).get("ground_truth")[-1] // 3
+                    if relevant_cars.get(log_id).get("ground_truth")[-1] // 3 < argo_data.num_lidar_frame - 1
+                    else argo_data.num_lidar_frame - 1
+                )
                 adj_obj_ids = relevant_cars[log_id]["adj_cars"]
                 cross_obj_ids = relevant_cars[log_id]["cross_cars"]
                 evidence_dict = get_evidence(city_map, argo_data, end_time)

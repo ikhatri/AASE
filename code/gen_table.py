@@ -5,6 +5,7 @@
 
 # Imports
 import csv
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -16,12 +17,12 @@ from plotting import read_csv
 # if they obtained the correct sequence and if so what is the time delta of the transitions. All methods are sampled at 1 hz.
 
 
-def get_sequences(folder: str, log_id: str, threshold: float=0.0) -> tuple:
+def get_sequences(folder: str, log_id: str, threshold: float = 0.0) -> tuple:
     relevant_cars = load_relevant_cars(RELEVANT_JSON, folder)
 
     # Get the sequence from a AASE + YOLO output
     yolo_aase = read_csv(folder, log_id)[1]
-    end_time = len(yolo_aase["red"])-1
+    end_time = len(yolo_aase["red"]) - 1
     aase_sequence = []
     for i in range(end_time):
         r = (yolo_aase["red"][i], "R")
@@ -36,7 +37,7 @@ def get_sequences(folder: str, log_id: str, threshold: float=0.0) -> tuple:
     tmp_gt_sequence = []
     for i in range(0, len(gt), 3):
         tmp_gt_sequence = tmp_gt_sequence + ([gt[i]] * (gt[i + 2] - gt[i + 1]))
-    gt_sequence = [tmp_gt_sequence[x*3-3] for x in range(end_time)]
+    gt_sequence = [tmp_gt_sequence[x * 3 - 3] for x in range(end_time)]
     # print(gt_sequence)
 
     # Get the sequence from pure YOLO
