@@ -301,7 +301,7 @@ def compute_velocity(data_dict: dict, end_time: int) -> dict:
 
 def discretize(city_map: ArgoverseMap, argoverse_data: ArgoverseTrackingLoader, data_dict: dict) -> dict:
     """
-    A function to discretize the data into position segments and the following three velocity classes:
+    A function to discretize the data into position segments and the following three velocity classes in (m/0.1s):
         0: zero (0 < v < 0.1)
         1: low (0.1 < v < 0.5)
         2: high (0.5 < v)

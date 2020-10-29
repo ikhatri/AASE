@@ -1,0 +1,7 @@
+states,Red_red,red_Red,green_red,yellow_red,red_green,red_yellow
+Red_red,0.8513399,0,0,0,0,0.0283583
+red_Red,0,0.8513399,0,0.0283583,0,0
+green_red,0.1486601,0,0.9948838,0,0,0
+yellow_red,0,0,0.0051162,0.9716417,0,0
+red_green,0,0.1486601,0,0,0.9948838,0
+red_yellow,0,0,0,0,0.0051162,0.9716417

@@ -19,7 +19,7 @@ from model_pom import *
 SAMPLE_DIR = Path("sample-data/")
 GLARE_DIR = Path("glare_example/")
 ARGOVERSE_TRACKING = Path("/home/ikhatri/argoverse/argoverse-api/argoverse-tracking")
-PARAMS_DIR = Path("params/")
+PARAMS_DIR = Path("params/10hz")
 logger = logging.getLogger(__name__)
 
 
@@ -65,14 +65,14 @@ def plot_runtime(times: list):
 
 if __name__ == "__main__":
     print("Using GPU?", pom.utils.is_gpu_enabled())
-    interval = 10  # out of 10 hz, so it's every 5th image of the 10/second that we have
-    adj_obj_ids = [4, 9]
+    interval = 1  # out of 10 hz, so it's every 5th image of the 10/second that we have
+    adj_obj_ids = [0,1,2]
     cross_obj_ids = []
-    log_id = "577ea60d-7cc0-34a4-a8ff-0401e5ab9c62"
-    argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath("train2")).get(log_id)
+    log_id = "64c12551-adb9-36e3-a0c1-e43a0e9f3845"
+    argo_data = load_all_logs(ARGOVERSE_TRACKING.joinpath("train1")).get(log_id)
     end_time = argo_data.num_lidar_frame - 1
     print(argo_data)
-    print("City Code: {argo_data.city_name}")
+    print(f"City Code: {argo_data.city_name}")
     city_map = ArgoverseMap()
     # visualize(city_map, argo_data, end_time)
 
@@ -87,13 +87,13 @@ if __name__ == "__main__":
                 pom_evidence_dicts[timestep][key] = value
     pom_evidence_dicts.pop(0)
 
-    ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath("train2/" + log_id + "/rfc.txt"))
+    ft, yolo = parse_yolo(ARGOVERSE_TRACKING.joinpath("train1/" + log_id + "/rfc.txt"))
     yolo_evidence = yolo_to_evidence(yolo, ft, interval)
     for t, e in enumerate(pom_evidence_dicts):
         if t in yolo_evidence:
             e.update(yolo_evidence[t])
 
-    filepath = Path("params")
+    filepath = PARAMS_DIR
     dbn, names = init_DBN(filepath, adj_obj_ids, cross_obj_ids)
     dbn.bake()
     pom_out = []

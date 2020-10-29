@@ -5,10 +5,12 @@
 
 import timeit
 from pathlib import Path
+from typing import List
 
 import numpy as np
 import pandas as pd
 import pomegranate as pom
+from scipy.linalg import fractional_matrix_power
 
 
 def load_cpt(filepath: Path, epsilon: float = 0):
@@ -22,7 +24,7 @@ def load_cpt(filepath: Path, epsilon: float = 0):
     return model_weights
 
 
-def load_cpt_weights(filepath: Path, epsilon: float = 0):
+def load_cpt_weights(filepath: Path, epsilon: float = 0) -> List[str]:
     labeled_dataframe = pd.read_csv(filepath)
     states = list(labeled_dataframe.states.values)
     labeled_dataframe.set_index("states", inplace=True)
@@ -101,9 +103,9 @@ def build_backbone_DBN_slice(filepath: Path, system_belief: pom.DiscreteDistribu
     """
     TODO: Documentation
     """
-    system_weights = load_cpt_weights(filepath.joinpath("system_model.csv"), epsilon=0.01)
-    our_weights = load_cpt_weights(filepath.joinpath("our_light_model.csv"), epsilon=0.005)
-    cross_weights = load_cpt_weights(filepath.joinpath("cross_light_model.csv"), epsilon=0.005)
+    system_weights = load_cpt_weights(filepath.joinpath("system_model.csv"), epsilon=0.00001)
+    our_weights = load_cpt_weights(filepath.joinpath("our_light_model.csv"), epsilon=0.00001)
+    cross_weights = load_cpt_weights(filepath.joinpath("cross_light_model.csv"), epsilon=0.00001)
     vision_weights = load_cpt_weights(filepath.joinpath("vision_evidence.csv"), epsilon=0.08)
 
     system_cpt = pom.ConditionalProbabilityTable(system_weights, [system_belief])
@@ -169,8 +171,8 @@ def setup_car_DBN_slice(
         position_belief: the initial (or previous) distribution of the position
         velocity_belief: the initial or previous distribution of the velocity
     """
-    velocity_weights = load_cpt_weights(filepath.joinpath("velocity_model.csv"), epsilon=0.03)
-    position_weights = load_cpt_weights(filepath.joinpath("position_model.csv"), epsilon=0.01)
+    velocity_weights = load_cpt_weights(filepath.joinpath("velocity_model.csv"), epsilon=0.00292195)
+    position_weights = load_cpt_weights(filepath.joinpath("position_model.csv"), epsilon=0.0001)
     driver_weights = load_cpt_weights(filepath.joinpath("driver_model.csv"), epsilon=0.01)
     evidence_pos_weights = load_cpt_weights(filepath.joinpath("evidence_pos.csv"), epsilon=0.05)
     evidence_vel_weights = load_cpt_weights(filepath.joinpath("evidence_vel.csv"), epsilon=0.05)
@@ -271,11 +273,11 @@ def add_cars_DBN(
 def init_DBN(filepath: Path, adj_car_ids: list, cross_car_ids: list):
     system_prior = pom.DiscreteDistribution(
         {
-            "Red_red": 1.0 / 10,
-            "red_Red": 1.0 / 10,
-            "red_green": 3.0 / 10,
+            "Red_red": 0.5 / 10,
+            "red_Red": 0.5 / 10,
+            "red_green": 3.5 / 10,
             "red_yellow": 1.0 / 10,
-            "green_red": 3.0 / 10,
+            "green_red": 3.5 / 10,
             "yellow_red": 1.0 / 10,
         }
     )
@@ -313,15 +315,20 @@ def iterate_DBN(
 ):
     s_iter = str(iter)
     if "system_" + s_iter in prev_beliefs:
+        # print(prev_beliefs["system_" + s_iter])
+        # m = max(prev_beliefs["system_" + s_iter].values())
+        # for k in prev_beliefs["system_" + s_iter]:
+        #     if prev_beliefs["system_" + s_iter][k] != m:
+        #         prev_beliefs["system_" + s_iter][k] = 0
         system_prior = pom.DiscreteDistribution(prev_beliefs["system_" + s_iter])
     else:
         system_prior = pom.DiscreteDistribution(
             {
-                "Red_red": 1.0 / 10,
-                "red_Red": 1.0 / 10,
-                "red_green": 3.0 / 10,
+                "Red_red": 0.5 / 10,
+                "red_Red": 0.5 / 10,
+                "red_green": 3.5 / 10,
                 "red_yellow": 1.0 / 10,
-                "green_red": 3.0 / 10,
+                "green_red": 3.5 / 10,
                 "yellow_red": 1.0 / 10,
             }
         )

@@ -1,0 +1,4 @@
+states,zero,low,med
+zero,1,0,0
+low,0,1,0
+med,0,0,1

@@ -22,9 +22,9 @@ SAMPLE_DIR = Path("sample-data/")
 GLARE_DIR = Path("glare_example/")
 ARGOVERSE_TRACKING = Path("/home/ikhatri/argoverse/argoverse-api/argoverse-tracking")
 RELEVANT_JSON = Path("misc/relevant_cars.json")
-PARAMS_DIR = Path("params/")
-RESULTS_DIR = Path("results/")
-INTERVAL = 10  # out of 10 hz, so it's every 5th image of the 10/second that we have
+PARAMS_DIR = Path("params/10hz/")
+RESULTS_DIR = Path("results/10hz/")
+INTERVAL = 1  # out of 10 hz, so it's every 5th image of the 10/second that we have
 logger = logging.getLogger(__name__)
 
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
         for log_id in relevant_cars:
             if relevant_cars[log_id].get("skip", False) is False:
                 argo_data = argo_loader.get(log_id)
-                end_time = relevant_cars.get(log_id).get("ground_truth")[-1] * 10
+                end_time = relevant_cars.get(log_id).get("ground_truth")[-1] // 3 if relevant_cars.get(log_id).get("ground_truth")[-1] // 3 < argo_data.num_lidar_frame - 1 else argo_data.num_lidar_frame - 1
                 adj_obj_ids = relevant_cars[log_id]["adj_cars"]
                 cross_obj_ids = relevant_cars[log_id]["cross_cars"]
                 evidence_dict = get_evidence(city_map, argo_data, end_time)
@@ -82,7 +82,7 @@ if __name__ == "__main__":
                     if t in yolo_evidence:
                         e.update(yolo_evidence[t])
 
-                filepath = Path("params")
+                filepath = PARAMS_DIR
                 all_evidence = [pom_evidence_dicts, evidence_with_yolo]
                 all_predictions = [[], []]  # [aase, aase+yolo]
                 timing = [[], []]
@@ -101,5 +101,5 @@ if __name__ == "__main__":
 
                 # Before we write to a CSV we need to run an HMM on the YOLO output
                 max_timesteps, yolo_data = read_txt(ARGOVERSE_TRACKING.joinpath(f"{folder}/{log_id}/rfc.txt"))
-                yolo_hmm_predictions = yolo_hmm(max_timesteps, yolo_data)
+                yolo_hmm_predictions = yolo_hmm(max_timesteps, yolo_data, PARAMS_DIR)
                 write_to_csv(folder, log_id, all_predictions, timing, yolo_hmm_predictions)

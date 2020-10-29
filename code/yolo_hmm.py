@@ -43,7 +43,7 @@ def read_txt(filepath: Path) -> tuple:
     return timesteps, lines
 
 
-def yolo_hmm(timesteps: int, lines: dict) -> np.array:
+def yolo_hmm(timesteps: int, lines: dict, folder: Path) -> np.array:
     """ Smoothes out the YOLO outputs with a HMM."""
     # priors
     # vision_accuracy = load_cpt('params/vision_evidence.csv', epsilon = .15)
@@ -52,7 +52,7 @@ def yolo_hmm(timesteps: int, lines: dict) -> np.array:
     yellow_emission = DiscreteDistribution({"red": 4.0 / 100, "green": 1.0 / 100, "yellow": 95.0 / 100})
     vision_accuracy = [red_emission, green_emission, yellow_emission]
     # transition matrix
-    trans_mat = load_cpt("params/single_light_model.csv", epsilon=0).T
+    trans_mat = load_cpt(folder.joinpath("single_light_model.csv"), epsilon=0).T
     initial_prob = np.array([5.0 / 10, 4.0 / 10, 1.0 / 10])
     # model
     model = HiddenMarkovModel.from_matrix(trans_mat, vision_accuracy, initial_prob)

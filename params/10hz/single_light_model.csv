@@ -1,0 +1,4 @@
+states,red,green,yellow
+red,.999,0,.03
+green,.001,.999,0
+yellow,0,.001,.97

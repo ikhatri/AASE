@@ -4,6 +4,7 @@
 # Resource-Bounded Reasoning Lab
 
 # Imports
+import csv
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -15,35 +16,39 @@ from plotting import read_csv
 # if they obtained the correct sequence and if so what is the time delta of the transitions. All methods are sampled at 1 hz.
 
 
-def get_sequences(folder: str, log_id: str) -> tuple:
+def get_sequences(folder: str, log_id: str, threshold: float=0.0) -> tuple:
     relevant_cars = load_relevant_cars(RELEVANT_JSON, folder)
-
-    # Get the true sequence
-    gt = relevant_cars.get(log_id).get("ground_truth")
-    end_time = gt[-1]
-    gt_sequence = []
-    for i in range(0, len(gt), 3):
-        gt_sequence = gt_sequence + ([gt[i]] * (gt[i + 2] - gt[i + 1]))
-    # print(gt_sequence)
 
     # Get the sequence from a AASE + YOLO output
     yolo_aase = read_csv(folder, log_id)[1]
+    end_time = len(yolo_aase["red"])-1
     aase_sequence = []
     for i in range(end_time):
         r = (yolo_aase["red"][i], "R")
         g = (yolo_aase["green"][i], "G")
         y = (yolo_aase["yellow"][i], "Y")
-        aase_sequence.append(max(r, g, y)[1])
+        output = max(r, g, y)[1] if max(r, g, y)[0] > threshold else (0, "N")
+        aase_sequence.append(output)
     # print(aase_sequence)
+
+    # Get the true sequence
+    gt = relevant_cars.get(log_id).get("ground_truth")
+    tmp_gt_sequence = []
+    for i in range(0, len(gt), 3):
+        tmp_gt_sequence = tmp_gt_sequence + ([gt[i]] * (gt[i + 2] - gt[i + 1]))
+    gt_sequence = [tmp_gt_sequence[x*3-3] for x in range(end_time)]
+    # print(gt_sequence)
 
     # Get the sequence from pure YOLO
     yolo = np.genfromtxt(RESULTS_DIR.joinpath(f"{folder}/{log_id}_yolo.csv"), delimiter=",")
     yolo_sequence = []
-    for i in range(0, end_time * 30, 30):
+    max_yolo_length = end_time * 3 if end_time * 3 < len(yolo) else len(yolo)
+    for i in range(0, max_yolo_length, 3):
         r = (yolo[i][0], "R")
         g = (yolo[i][1], "G")
         y = (yolo[i][2], "Y")
-        yolo_sequence.append(max(r, g, y)[1])
+        output = max(r, g, y)[1] if max(r, g, y)[0] > threshold else (0, "N")
+        yolo_sequence.append(output)
     # print(yolo_sequence)
 
     return gt_sequence, aase_sequence, yolo_sequence
@@ -53,9 +58,12 @@ def hamming_distance(gt, aase, yolo):
     hd_aase = 0
     hd_yolo = 0
     # Shifting the ground truth as well for the human delay
-    gt = gt[:-2]
+    # gt = gt[:-2]
     # We shift by 2 seconds to account for human delay
-    aase = aase[2:]
+    # aase = aase[2:]
+    print(len(gt))
+    print(len(aase))
+    print(len(yolo))
     for index, light in enumerate(gt):
         if light != aase[index]:
             hd_aase += 1

@@ -1,0 +1,10 @@
+states,red|at|zero,red|at|low,red|at|med,red|left|zero,red|left|low,red|left|med,red|straight|zero,red|straight|low,red|straight|med,red|right|zero,red|right|low,red|right|med,green|at|zero,green|at|low,green|at|med,green|left|zero,green|left|low,green|left|med,green|straight|zero,green|straight|low,green|straight|med,green|right|zero,green|right|low,green|right|med,yellow|at|zero,yellow|at|low,yellow|at|med,yellow|left|zero,yellow|left|low,yellow|left|med,yellow|straight|zero,yellow|straight|low,yellow|straight|med,yellow|right|zero,yellow|right|low,yellow|right|med
+left_plus,0,0,0,0,0.1,0,0,0,0,0,0,0,0.1,0.1,0,0.4,0.6,0,0.1,0.05,0,0,0,0,0.05,0.05,0,0.15,0.3,0,0.05,0.05,0,0,0,0
+straight_plus,0,0,0,0,0,0,0.1,0.2,0,0,0,0,0.5,0.4,0,0,0,0,0.6,0.65,0,0,0,0,0.1,0.1,0,0,0,0,0.3,0.65,0,0,0,0
+right_plus,0,0,0,0,0,0,0,0,0,0.2,0.7,0,0.1,0.1,0,0,0,0,0.1,0.05,0,0.7,0.65,0,0.05,0.05,0,0,0,0,0,0,0,0.2,0.5,0
+left_zero,0,0,0,1,0,0.3,0,0,0,0,0,0,0,0.1,0.1,0.6,0.1,0.8,0,0,0,0,0,0,0,0,0,0.85,0.1,0.6,0,0,0,0,0,0
+straight_zero,1,0,0.05,0,0,0,0.9,0,0.3,0,0,0,0.3,0.2,0.6,0,0,0,0.2,0.2,0.95,0,0,0,0.8,0,0.3,0,0,0,0.65,0.2,0.85,0,0,0
+right_zero,0,0,0,0,0,0,0,0,0,0.8,0.2,0.9,0,0.1,0.1,0,0,0,0,0,0,0.3,0.3,0.9,0,0,0.1,0,0,0,0,0,0,0.8,0.1,0.75
+left_minus,0,0,0,0,0.9,0.7,0,0,0,0,0,0,0,0,0.1,0,0.3,0.2,0,0,0,0,0,0,0,0,0,0,0.6,0.4,0,0,0,0,0,0
+straight_minus,0,1,0.95,0,0,0,0,0.8,0.7,0,0,0,0,0,0,0,0,0,0,0.05,0.05,0,0,0,0,0.8,0.6,0,0,0,0,0.1,0.15,0,0,0
+right_minus,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0,0,0.1,0,0,0,0,0,0,0,0.05,0.1,0,0,0,0,0,0,0,0,0,0,0.4,0.25
