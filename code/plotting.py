@@ -22,6 +22,7 @@ GRAPH_DIR = Path("graphs/10hz")
 RED = [0.74, 0.33, 0.33]
 GREEN = [0.48, 0.69, 0.41]
 YELLOW = [0.86, 0.6, 0.16]
+LINEWIDTH = 1.5
 
 
 def read_csv(folder: str, log: str):
@@ -44,23 +45,24 @@ def plot_probs(probs: dict, interval: int):
     ps.setupfig()
     ax = plt.gca()
     ps.grid()
-    ax.set_xlim([0, len(x_axis) * (interval / 10) - 1])
+    ax.set_xlim([0, len(x_axis) * (interval / 10)])
     ax.set_ylim([0, 1])
     r = ax.fill_between(x_axis, probs["red"])
     r.set_facecolors([RED + [0.3]])
     r.set_edgecolors([RED + [0.75]])
-    r.set_linewidths([2])
+    r.set_linewidths([LINEWIDTH])
 
     g = ax.fill_between(x_axis, probs["green"])
     g.set_facecolors([GREEN + [0.3]])
     g.set_edgecolors([GREEN + [0.75]])
-    g.set_linewidths([2])
+    g.set_linewidths([LINEWIDTH])
 
     y = ax.fill_between(x_axis, probs["yellow"])
     y.set_facecolors([YELLOW + [0.3]])
     y.set_edgecolors([YELLOW + [0.75]])
-    y.set_linewidths([2])
+    y.set_linewidths([LINEWIDTH])
     plt.tight_layout()
+    return len(x_axis)
 
 
 def plot_runtime(times: list):
@@ -71,9 +73,9 @@ def plot_runtime(times: list):
     plt.ylim(ymin=0)
 
 
-def plot_ground_truth(relevant_json: dict, log: str, ground_truth_hz: int = 30):
+def plot_ground_truth(relevant_json: dict, log: str, ground_truth_hz: int = 30, x_lim = None):
     ranges = relevant_json.get(log).get("ground_truth")
-    end_time = ranges[-1] / ground_truth_hz
+    end_time = x_lim/10 if x_lim else ranges[-1] / ground_truth_hz
     plt.figure()
     ps.setupfig()
     ax = plt.gca()
@@ -93,13 +95,13 @@ def plot_ground_truth(relevant_json: dict, log: str, ground_truth_hz: int = 30):
         )
         fill.set_facecolors([color + [0.3]])
         fill.set_edgecolors([color + [0.75]])
-        fill.set_linewidths([2])
+        fill.set_linewidths([LINEWIDTH])
     plt.tight_layout()
 
 
-def plot_yolo_hmm(preds: np.array, relevant_json: dict, log: str) -> None:
+def plot_yolo_hmm(preds: np.array, relevant_json: dict, log: str, x_lim = None) -> None:
     ranges = relevant_json.get(log).get("ground_truth")
-    end_time = ranges[-1]
+    end_time = x_lim*3 if x_lim else ranges[-1]
     plt.figure()
     ps.setupfig()
     ax = plt.gca()
@@ -109,17 +111,17 @@ def plot_yolo_hmm(preds: np.array, relevant_json: dict, log: str) -> None:
     r = ax.fill_between([x / 30 for x in range(len(preds[:end_time]))], preds[:end_time, 0])
     r.set_facecolors([RED + [0.3]])
     r.set_edgecolors([RED + [0.75]])
-    r.set_linewidths([2])
+    r.set_linewidths([LINEWIDTH])
 
     g = ax.fill_between([x / 30 for x in range(len(preds[:end_time]))], preds[:end_time, 1])
     g.set_facecolors([GREEN + [0.3]])
     g.set_edgecolors([GREEN + [0.75]])
-    g.set_linewidths([2])
+    g.set_linewidths([LINEWIDTH])
 
     y = ax.fill_between([x / 30 for x in range(len(preds[:end_time]))], preds[:end_time, 2])
     y.set_facecolors([YELLOW + [0.3]])
     y.set_edgecolors([YELLOW + [0.75]])
-    y.set_linewidths([2])
+    y.set_linewidths([LINEWIDTH])
     plt.tight_layout()
 
 
@@ -130,17 +132,17 @@ if __name__ == "__main__":
         for log_id in relevant_cars:
             if relevant_cars[log_id].get("skip", False) is False:
                 results = read_csv(folder, log_id)
-                plot_probs(results[0], INTERVAL)
-                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_aase.png"))
+                x_lim = plot_probs(results[0], INTERVAL)
+                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_aase.png"), bbox_inches="tight", pad_inches=0, dpi=300)
                 plot_runtime(results[0]["runtime"])
                 plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_aase_runtime.png"))
                 plot_probs(results[1], INTERVAL)
-                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_aase_yolo.png"))
+                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_aase_yolo.png"), bbox_inches="tight", pad_inches=0, dpi=300)
                 plot_runtime(results[1]["runtime"])
                 plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_aase_yolo_runtime.png"))
-                plot_ground_truth(relevant_cars, log_id)
-                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_ground_truth.png"))
+                plot_ground_truth(relevant_cars, log_id, x_lim=x_lim)
+                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_ground_truth.png"), bbox_inches="tight", pad_inches=0, dpi=300)
                 # Plotting the YOLO only output, smoothed by an HMM
                 yolo_predictions = np.genfromtxt(RESULTS_DIR.joinpath(f"{folder}/{log_id}_yolo.csv"), delimiter=",")
-                plot_yolo_hmm(yolo_predictions, relevant_cars, log_id)
-                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_yolo_hmm.png"))
+                plot_yolo_hmm(yolo_predictions, relevant_cars, log_id, x_lim=x_lim)
+                plt.savefig(GRAPH_DIR.joinpath(f"{folder}/{log_id}_yolo_hmm.png"), bbox_inches="tight", pad_inches=0, dpi=300)

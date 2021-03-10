@@ -29,10 +29,3 @@ Next, before running the YOLO classifier, you'll need to turn the sequences of i
 Finally you can run the YOLO model on these videos, simply run `run_darknet_video.sh` as follows: `./run_darknet_video.sh /path/to/darknet/ /path/to/argoverse-tracking/train1/log_id`. This script will create a new video that has the YOLO detections along with a text file that contains the YOLO detections & their confidences.
 
 To run the experiments listed in the paper simply run `python code/experiments.py` after modifying the `ARGOVERSE_TRACKING` variable in the script, and to generate plots from the experiments you can run `python code/plotting.py`. If you would like to tweak the cars chosen for a specific scenario you can modify `misc/relevant_cars.json` and if you'd like to visualize the object IDs for those cars in a LiDAR frame you can do so with the `code/dataloader.py` script which has some command line options for you to use.
-
-## Todo
-1. ✔ Fix gt and lt sign depending on map? in dataloader
-2. Fix index out of bounds errors in main.py line 81 when end_time is set to specific numbers
-    - For example in log train1/b1ca... setting end_time to 275 causes out of bounds error but 290 is perfectly fine
-3. ✔ Code cleanup and documentation
-4. ✔ In the visualize function instead of relying on the colors to tell cars apart, just print the ID as text in the 3D env

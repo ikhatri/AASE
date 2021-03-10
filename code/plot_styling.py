@@ -43,7 +43,7 @@ def setupfig(current_fig=None, halfsize=False, thirdsize=False, quartersize=Fals
     if quartersize:
         halfsize_scale = 0.19
     # fig.set_size_inches(7 /kScaleDown * 1.58 * halfsize_scale , 7.8 / kScaleDown / 1.61 * kVerticalScale, forward=True)
-    fig.set_size_inches(7, 1.25, forward=True)
+    fig.set_size_inches(11, 1.20, forward=True)
     plt.gca().set_axisbelow(True)
     # change the color of the top and right spines to opaque gray
     plt.gca().spines["right"].set_color((0.8, 0.8, 0.8))
@@ -89,4 +89,4 @@ def save_fig(filename):
     print("Saving figout/{}.*".format(filename))
     # plt.savefig("figout/{}.pgf".format(filename), bbox_inches='tight')
     # plt.savefig("figout/{}.png".format(filename), bbox_inches='tight', dpi=200)
-    plt.savefig("figout/{}.pdf".format(filename), bbox_inches="tight", pad_inches=0)
+    plt.savefig("figout/{}.pdf".format(filename), bbox_inches="tight", pad_inches=0, dpi=300)
