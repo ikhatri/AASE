@@ -16,9 +16,9 @@ Once you finish running this command a conda environment called `aase` will be c
 Activate the environment and then proceed to manually install the Argoverse dataset API (which is not available as a pip or conda package) by following the instructions in [their repo](https://github.com/argoai/argoverse-api#installation). Note that you will not need to manually install the optional `mayavi` package as we include it as a part of the conda environment.
 
 ## Run experiments
-To run the experiments you'll need to complete a few steps in advance. First you need to download and compile [darknet](https://github.com/AlexeyAB/darknet). Then you'll need to download our trained weights and configuration files for the traffic light classifier from [link redacted](https://google.com). You will have downloaded 4 files:
+To run the experiments you'll need to complete a few steps in advance. First you need to download and compile [darknet](https://github.com/AlexeyAB/darknet). Then you'll need to download our trained weights and configuration files for the traffic light classifier from [this zip file](https://drive.google.com/file/d/1JwNzimyyAsNuLazt-X6e7wQLXqCsBDoT/view?usp=sharing). You will have downloaded 4 files in the zip folder:
 1. In the folder where you've cloned the darknet repository, create folders called `cfg`, `data`, and `backup` if they don't exist already.
-2. Move the downloaded files as follows:
+2. Extract the downloaded files as follows:
     - `data/tl.data`
     - `data/tl.names`
     - `cfg/yolov3-tl.cfg`
